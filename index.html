@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Tyres Now! – On-Site Tyre Fitting Johannesburg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=Barlow+Semi+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ═══════════════════════════════════════════
+   CONFIG — paste your keys here
+═══════════════════════════════════════════ */
+:root {
+  --supabase-url: 'YOUR_SUPABASE_URL';
+  --supabase-key: 'YOUR_SUPABASE_ANON_KEY';
+}
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --orange: #FF5C00;
+  --orange-light: #FF7A2E;
+  --orange-glow: rgba(255,92,0,0.18);
+  --dark: #080808;
+  --dark2: #111010;
+  --dark3: #191818;
+  --card: #151414;
+  --border: rgba(255,255,255,0.06);
+  --border-orange: rgba(255,92,0,0.3);
+  --text: #F2EDE8;
+  --muted: #7A746E;
+  --muted2: #4A4542;
+  --green: #00C853;
+  --blue: #2196F3;
+  --red: #FF3D3D;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; }
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════
+   TYRE TREAD BACKGROUND — SVG pattern
+═══════════════════════════════════════════ */
+.tread-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  opacity: 0.04;
+  background-color: transparent;
+  background-image:
+    /* Main tread blocks */
+    repeating-linear-gradient(
+      10deg,
+      transparent 0px, transparent 14px,
+      rgba(255,92,0,1) 14px, rgba(255,92,0,1) 18px,
+      transparent 18px, transparent 36px,
+      rgba(255,92,0,1) 36px, rgba(255,92,0,1) 40px,
+      transparent 40px, transparent 58px
+    ),
+    /* Cross-grooves */
+    repeating-linear-gradient(
+      100deg,
+      transparent 0px, transparent 28px,
+      rgba(255,92,0,0.6) 28px, rgba(255,92,0,0.6) 30px,
+      transparent 30px, transparent 58px
+    );
+  background-size: 58px 58px;
+}
+
+/* ═══════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════ */
+.app {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════════ */
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+  animation: fadeUp 0.28s ease;
+}
+.screen.active { display: flex; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   BOTTOM NAVBAR
+═══════════════════════════════════════════ */
+.navbar {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 430px;
+  background: rgba(10,10,10,0.96);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 999;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; padding: 10px 4px 8px;
+  cursor: pointer; gap: 3px;
+  transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-icon { font-size: 22px; line-height: 1; }
+.nav-label { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
+.nav-item.active .nav-label { color: var(--orange); }
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px var(--orange)); }
+.nav-badge {
+  position: absolute; top: 6px; right: calc(50% - 20px);
+  background: var(--orange); color: #fff;
+  font-size: 9px; font-weight: 800;
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-item { position: relative; }
+
+/* ═══════════════════════════════════════════
+   SCROLL CONTAINER (accounts for fixed navbar)
+═══════════════════════════════════════════ */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ═══════════════════════════════════════════
+   SCREEN: HOME / LANDING
+═══════════════════════════════════════════ */
+.hero-section {
+  min-height: calc(100vh - 60px);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero-top {
+  padding: 52px 24px 0;
+}
+.brand-mark {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 32px;
+}
+.brand-icon {
+  width: 44px; height: 44px;
+  background: var(--orange);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.brand-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--text); letter-spacing: 0.04em;
+}
+.brand-name span { color: var(--orange); }
+
+.live-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(0,200,83,0.1);
+  border: 1px solid rgba(0,200,83,0.25);
+  color: var(--green);
+  font-size: 11px; font-weight: 600;
+  padding: 5px 12px; border-radius: 100px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: blink 1.4s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+.hero-headline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(64px, 18vw, 88px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.hero-headline .accent { color: var(--orange); display: block; }
+
+.hero-tagline {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 280px;
+}
+.hero-tagline strong { color: var(--text); font-weight: 500; }
+
+.hero-stats {
+  display: flex; gap: 0;
+  margin-bottom: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.stat-item {
+  flex: 1; padding: 14px 12px; text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-val { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 800; color: var(--orange); line-height: 1; }
+.stat-lbl { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+.hero-cta-btn {
+  width: 100%;
+  background: var(--orange);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 18px 24px;
+  border-radius: var(--radius);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-cta-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.hero-cta-btn:hover::after { transform: translateX(100%); }
+.hero-cta-btn:active { transform: scale(0.98); }
+.cta-arrow { font-size: 26px; }
+
+.hero-phone {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  color: var(--muted); font-size: 13px; padding: 12px;
+  text-decoration: none; border-radius: var(--radius-sm);
+  transition: color 0.2s;
+}
+.hero-phone:hover { color: var(--text); }
+
+.hero-bottom {
+  padding: 0 24px 24px;
+}
+
+/* How it works strip */
+.how-strip {
+  margin: 0 24px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.how-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px; }
+.how-steps { display: flex; flex-direction: column; gap: 12px; }
+.how-step { display: flex; align-items: center; gap: 14px; }
+.how-num {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: var(--orange-glow);
+  border: 1px solid var(--border-orange);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 800; color: var(--orange);
+}
+.how-text { font-size: 13px; color: var(--text); font-weight: 400; line-height: 1.3; }
+.how-text strong { font-weight: 600; display: block; }
+.how-text span { color: var(--muted); font-size: 12px; }
+
+/* ═══════════════════════════════════════════
+   SCREEN: REQUEST FORM
+═══════════════════════════════════════════ */
+.form-header {
+  padding: 52px 24px 0;
+  margin-bottom: 24px;
+}
+.screen-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--orange);
+  margin-bottom: 8px; display: block;
+}
+.screen-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 42px; font-weight: 900;
+  letter-spacing: 0.02em; color: #fff; line-height: 0.95;
+}
+.screen-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* Progress */
+.progress-bar {
+  margin: 0 24px 24px;
+  height: 3px; background: var(--dark3); border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--orange);
+  border-radius: 2px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 8px var(--orange);
+}
+.progress-steps {
+  padding: 0 24px;
+  display: flex; gap: 4px; margin-bottom: 28px;
+}
+.pstep {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: var(--dark3); transition: background 0.3s;
+}
+.pstep.done { background: var(--orange); box-shadow: 0 0 6px rgba(255,92,0,0.4); }
+
+/* Form cards */
+.form-body { padding: 0 24px; display: flex; flex-direction: column; gap: 16px; }
+
+.field-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: border-color 0.2s;
+}
+.field-card:focus-within { border-color: var(--border-orange); }
+.field-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted); margin-bottom: 8px; display: block;
+}
+.field-input {
+  width: 100%; background: transparent;
+  border: none; outline: none;
+  color: var(--text); font-family: 'Barlow', sans-serif;
+  font-size: 16px; font-weight: 500;
+  padding: 0;
+}
+.field-input::placeholder { color: var(--muted2); }
+select.field-input {
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234A4542' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  padding-right: 20px;
+  cursor: pointer;
+}
+textarea.field-input { resize: none; min-height: 72px; line-height: 1.5; }
+
+.field-hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.field-error { font-size: 11px; color: var(--red); margin-top: 6px; display: none; }
+
+/* Size picker */
+.size-display {
+  display: flex; align-items: baseline; gap: 2px;
+  margin-bottom: 14px;
+}
+.size-big {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 52px; font-weight: 900; color: var(--orange); line-height: 1;
+}
+.size-unit { font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 4px; }
+.size-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.size-sel { 
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+  text-align: center; color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 700;
+  -webkit-appearance: none; outline: none; cursor: pointer;
+  transition: border-color 0.2s; width: 100%;
+}
+.size-sel:focus { border-color: var(--border-orange); }
+.size-sel-label { font-size: 10px; color: var(--muted); text-align: center; margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Toggle */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  transition: border-color 0.2s;
+}
+.toggle-row:hover { border-color: var(--border-orange); }
+.toggle-info strong { display: block; font-size: 14px; font-weight: 500; }
+.toggle-info span { font-size: 12px; color: var(--muted); }
+.toggle-pill {
+  width: 44px; height: 24px;
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 12px; position: relative; transition: all 0.25s; flex-shrink: 0;
+}
+.toggle-pill::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: var(--muted); border-radius: 50%;
+  transition: all 0.25s;
+}
+.toggle-row.on .toggle-pill { background: var(--orange); border-color: var(--orange); }
+.toggle-row.on .toggle-pill::after { left: 23px; background: #fff; }
+
+/* Photo upload */
+.photo-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.photo-slot {
+  background: var(--dark3);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  aspect-ratio: 4/3;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; cursor: pointer;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.photo-slot:hover { border-color: var(--border-orange); }
+.photo-slot.filled { border-style: solid; border-color: rgba(255,92,0,0.4); }
+.photo-slot input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0;
+}
+.slot-icon { font-size: 28px; }
+.slot-label { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; padding: 0 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.slot-preview { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; }
+.slot-retake {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.7); color: var(--orange);
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  text-align: center; padding: 6px; letter-spacing: 0.06em;
+}
+
+/* Time selector */
+.time-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.time-opt {
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 6px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+}
+.time-opt.sel { border-color: var(--orange); background: var(--orange-glow); }
+.time-emoji { font-size: 22px; display: block; margin-bottom: 4px; }
+.time-name { font-size: 12px; font-weight: 700; display: block; text-transform: uppercase; letter-spacing: 0.04em; }
+.time-range { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+
+/* Review */
+.review-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin: 0 24px 12px;
+}
+.review-head {
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--dark3);
+}
+.review-head-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.review-edit { font-size: 12px; color: var(--orange); font-weight: 600; cursor: pointer; }
+.review-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.review-row { display: flex; gap: 10px; }
+.review-key { font-size: 12px; color: var(--muted); min-width: 75px; }
+.review-val { font-size: 13px; font-weight: 500; flex: 1; }
+.review-size-val { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 900; color: var(--orange); }
+.review-photos { display: flex; gap: 8px; }
+.review-photo-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+
+/* Form nav buttons */
+.form-nav {
+  display: flex; gap: 10px;
+  padding: 20px 24px 32px;
+}
+.btn-back {
+  width: 52px; height: 52px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--muted);
+  font-size: 20px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--orange); color: var(--text); }
+.btn-primary {
+  flex: 1; height: 52px;
+  background: var(--orange); color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--orange-light); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-spinner {
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════
+   SCREEN: SUCCESS
+═══════════════════════════════════════════ */
+#screen-success {
+  justify-content: center; align-items: center;
+  text-align: center; padding: 40px 24px;
+}
+.success-ring {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: rgba(0,200,83,0.08);
+  border: 2px solid rgba(0,200,83,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; margin: 0 auto 24px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.success-ref {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 38px; font-weight: 900;
+  color: var(--orange); margin-bottom: 6px; letter-spacing: 0.04em;
+}
+.success-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 48px; font-weight: 900; color: #fff;
+  line-height: 0.95; margin-bottom: 14px;
+}
+.success-msg { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 300px; margin: 0 auto 32px; }
+.success-msg strong { color: var(--text); }
+.wa-btn {
+  width: 100%; padding: 16px;
+  background: #25D366; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 800; letter-spacing: 0.06em;
+  border: none; border-radius: var(--radius); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.outline-btn {
+  width: 100%; padding: 14px;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: 'Barlow', sans-serif; font-size: 14px;
+  cursor: pointer; transition: all 0.2s;
+}
+.outline-btn:hover { border-color: var(--orange); color: var(--text); }
+
+/* ═══════════════════════════════════════════
+   SCREEN: ADMIN
+═══════════════════════════════════════════ */
+.admin-topbar {
+  padding: 52px 24px 16px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.admin-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 40px; font-weight: 900; letter-spacing: 0.02em; color: #fff; line-height: 1;
+}
+.admin-subtitle { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.admin-logout {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; font-weight: 600;
+  padding: 6px 12px; border-radius: 8px; cursor: pointer;
+  font-family: 'Barlow', sans-serif; margin-top: 4px;
+  transition: all 0.2s;
+}
+.admin-logout:hover { border-color: var(--orange); color: var(--text); }
+
+/* Admin PIN */
+.pin-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; }
+.pin-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 56px; font-weight: 900; color: var(--orange); letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.pin-sub { font-size: 12px; color: var(--muted); margin-bottom: 40px; text-align: center; }
+.pin-dots { display: flex; gap: 14px; margin-bottom: 36px; }
+.pin-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--muted2);
+  transition: all 0.15s;
+}
+.pin-dot.filled { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 8px rgba(255,92,0,0.5); }
+.pin-pad {
+  display: grid; grid-template-columns: repeat(3, 72px);
+  gap: 10px; margin: 0 auto;
+}
+.pin-key {
+  width: 72px; height: 72px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px; font-weight: 700; color: var(--text);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: all 0.12s; user-select: none; gap: 0;
+}
+.pin-key-sub { font-size: 8px; color: var(--muted); letter-spacing: 0.12em; font-family: 'Barlow', sans-serif; font-weight: 600; }
+.pin-key:active { background: var(--orange-glow); border-color: var(--orange); transform: scale(0.94); }
+.pin-key.ghost { background: transparent; border-color: transparent; pointer-events: none; }
+.pin-key.del { font-size: 22px; }
+.pin-err { color: var(--red); font-size: 12px; margin-top: 20px; min-height: 18px; text-align: center; }
+
+/* Filter tabs */
+.filter-tabs {
+  display: flex; gap: 0; padding: 0 24px;
+  overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.filter-tab {
+  padding: 10px 16px; font-size: 12px; font-weight: 700;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.filter-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+.tab-n {
+  background: var(--dark3); border-radius: 6px;
+  padding: 1px 5px; font-size: 10px; margin-left: 4px;
+}
+
+/* Job cards */
+.jobs-list { padding: 0 24px; display: flex; flex-direction: column; gap: 10px; }
+.job-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 14px;
+}
+.job-card:hover { border-color: var(--border-orange); }
+.job-card-left { flex: 1; min-width: 0; }
+.job-card-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.job-card-meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; }
+.job-card-size {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--orange);
+  flex-shrink: 0; line-height: 1;
+}
+.job-card-right { text-align: right; flex-shrink: 0; }
+.status-pill {
+  display: inline-block;
+  font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 3px 8px; border-radius: 6px; margin-bottom: 4px;
+}
+.sp-pending  { background: rgba(255,92,0,0.15);  color: var(--orange); }
+.sp-sourcing { background: rgba(33,150,243,0.15); color: var(--blue); }
+.sp-confirmed{ background: rgba(0,200,83,0.15);  color: var(--green); }
+.sp-complete { background: rgba(255,255,255,0.06); color: var(--muted); }
+.job-date { font-size: 10px; color: var(--muted2); }
+
+/* Job detail */
+.detail-topbar {
+  padding: 52px 24px 16px;
+  display: flex; align-items: center; gap: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-back {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; transition: all 0.2s;
+}
+.detail-back:hover { border-color: var(--orange); }
+.detail-ref {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px; font-weight: 900; color: var(--orange); letter-spacing: 0.04em;
+}
+
+.detail-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  margin: 12px 24px 0;
+}
+.ds-head {
+  padding: 10px 14px;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+}
+.ds-body { padding: 14px; }
+.ds-field { display: flex; gap: 10px; margin-bottom: 8px; }
+.ds-field:last-child { margin-bottom: 0; }
+.ds-key { font-size: 12px; color: var(--muted); min-width: 80px; flex-shrink: 0; }
+.ds-val { font-size: 13px; font-weight: 500; flex: 1; }
+.call-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.25);
+  color: var(--green); padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 2px;
+}
+.maps-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(33,150,243,0.1); border: 1px solid rgba(33,150,243,0.25);
+  color: var(--blue); padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 6px;
+}
+
+/* Photo row */
+.detail-photos { display: flex; gap: 10px; }
+.detail-photo {
+  flex: 1; aspect-ratio: 4/3;
+  object-fit: cover; border-radius: 10px;
+  border: 1px solid var(--border); cursor: pointer;
+  background: var(--dark3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 12px; text-align: center;
+}
+.detail-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+
+/* Status controls */
+.status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.status-btn {
+  padding: 12px 8px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--dark3);
+  color: var(--muted); font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s;
+}
+.status-btn:hover { border-color: var(--border-orange); color: var(--text); }
+.status-btn.active-pending   { border-color: var(--orange); background: rgba(255,92,0,0.1); color: var(--orange); }
+.status-btn.active-sourcing  { border-color: var(--blue);   background: rgba(33,150,243,0.1); color: var(--blue); }
+.status-btn.active-confirmed { border-color: var(--green);  background: rgba(0,200,83,0.1);   color: var(--green); }
+.status-btn.active-complete  { border-color: #555; background: rgba(255,255,255,0.05); color: var(--muted); }
+
+.admin-notes-ta {
+  width: 100%; background: var(--dark); border: 1px solid var(--border);
+  color: var(--text); font-family: 'Barlow', sans-serif; font-size: 13px;
+  padding: 10px; border-radius: 8px; resize: none; outline: none; min-height: 72px;
+  transition: border-color 0.2s;
+}
+.admin-notes-ta:focus { border-color: var(--border-orange); }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+.empty-text { font-size: 14px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  padding: 12px 20px; border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; pointer-events: none; z-index: 9999;
+  transition: opacity 0.3s; white-space: nowrap;
+  max-width: calc(100vw - 48px); backdrop-filter: blur(10px);
+}
+.toast.show { opacity: 1; }
+.toast.success { background: rgba(0,200,83,0.15); border: 1px solid rgba(0,200,83,0.3); color: var(--green); }
+.toast.error   { background: rgba(255,61,61,0.15); border: 1px solid rgba(255,61,61,0.3); color: var(--red); }
+.toast.info    { background: rgba(255,92,0,0.15); border: 1px solid rgba(255,92,0,0.3); color: var(--orange); }
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(8,8,8,0.9); backdrop-filter: blur(4px);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+}
+.loading-overlay.show { display: flex; }
+.loading-spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--dark3);
+  border-top-color: var(--orange);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+.loading-text { font-size: 14px; color: var(--muted); }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 10001;
+  background: rgba(0,0,0,0.96);
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.lightbox.show { display: flex; }
+.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* Config banner */
+.config-banner {
+  background: rgba(255,61,61,0.1); border-bottom: 1px solid rgba(255,61,61,0.2);
+  padding: 10px 16px; font-size: 12px; color: var(--red);
+  display: none; align-items: center; gap: 8px; text-align: center;
+  justify-content: center;
+}
+.config-banner.show { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- CONFIG BANNER -->
+<div class="config-banner" id="configBanner">
+  ⚠️ Add your Supabase keys to activate. <strong style="margin-left:4px">See setup guide below.</strong>
+</div>
+
+<!-- TYRE TREAD BACKGROUND -->
+<div class="tread-bg"></div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loadingText">Submitting your request...</div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- ════════════════════════════════════
+       SCREEN: HOME
+  ════════════════════════════════════ -->
+  <div class="screen active" id="screen-home">
+    <div class="scroll-content">
+      <div class="hero-section">
+        <div class="hero-top">
+          <div class="brand-mark">
+            <div class="brand-icon">🏎</div>
+            <div class="brand-name">TYRES<span>NOW!</span></div>
+          </div>
+          <div class="live-badge"><span class="live-dot"></span> Open for bookings</div>
+          <div class="hero-headline">
+            ON-SITE
+            <span class="accent">TYRE</span>
+            FITTING
+          </div>
+          <p class="hero-tagline">
+            <strong>Affordable Used Tyres.</strong><br>
+            We Come To You — On-site Tyre Fitting<br>In Johannesburg.
+          </p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-val">R3</div>
+              <div class="stat-lbl">To request</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-val">2h</div>
+              <div class="stat-lbl">Response time</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-val">JHB</div>
+              <div class="stat-lbl">Coverage</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-bottom">
+          <button class="hero-cta-btn" onclick="goTo('screen-request')">
+            <span>GET MY TYRE FITTED</span>
+            <span class="cta-arrow">→</span>
+          </button>
+          <a class="hero-phone" href="tel:+27110000000">📞 Call us: 011 000 0000</a>
+        </div>
+      </div>
+      <div class="how-strip">
+        <div class="how-title">How it works</div>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <div class="how-text"><strong>Fill in your request</strong><span>Tell us your tyre size, location &amp; upload 2 photos</span></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <div class="how-text"><strong>We call you back</strong><span>Within 2 hours to confirm &amp; quote</span></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <div class="how-text"><strong>We come to you</strong><span>Our tech arrives at your location &amp; fits the tyre</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN: REQUEST FORM (step-based)
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-request">
+    <div class="scroll-content" id="requestScroll">
+
+      <!-- STEP 1: Vehicle -->
+      <div id="step1" class="form-step">
+        <div class="form-header">
+          <span class="screen-label">Step 1 of 5</span>
+          <div class="screen-title">YOUR<br>VEHICLE</div>
+          <div class="screen-sub">Tell us about your car (optional but helpful)</div>
+        </div>
+        <div class="progress-steps">
+          <div class="pstep done" id="ps1"></div>
+          <div class="pstep" id="ps2"></div>
+          <div class="pstep" id="ps3"></div>
+          <div class="pstep" id="ps4"></div>
+          <div class="pstep" id="ps5"></div>
+        </div>
+        <div class="form-body">
+          <div class="field-card">
+            <label class="field-label">Vehicle Make</label>
+            <input class="field-input" type="text" id="f-make" placeholder="e.g. Toyota, VW, BMW" autocomplete="off">
+          </div>
+          <div class="field-card">
+            <label class="field-label">Model</label>
+            <input class="field-input" type="text" id="f-model" placeholder="e.g. Polo, Corolla, Ranger" autocomplete="off">
+          </div>
+          <div class="field-card">
+            <label class="field-label">Year</label>
+            <select class="field-input" id="f-year">
+              <option value="">Select year</option>
+              <script>for(let y=2026;y>=1990;y--) document.write(`<option>${y}</option>`)</script>
+            </select>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="goTo('screen-home')">←</button>
+          <button class="btn-primary" onclick="nextStep(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Tyre Size -->
+      <div id="step2" class="form-step" style="display:none">
+        <div class="form-header">
+          <span class="screen-label">Step 2 of 5</span>
+          <div class="screen-title">TYRE<br>SIZE</div>
+          <div class="screen-sub">Check the sidewall of your current tyre</div>
+        </div>
+        <div class="progress-steps">
+          <div class="pstep done"></div><div class="pstep done"></div>
+          <div class="pstep"></div><div class="pstep"></div><div class="pstep"></div>
+        </div>
+        <div class="form-body">
+          <div class="field-card" id="size-picker-card">
+            <div class="size-display">
+              <div class="size-big" id="sizeDisplay">— / — R—</div>
+            </div>
+            <div class="size-row">
+              <div>
+                <select class="size-sel" id="f-width" onchange="updateSize()">
+                  <option value="">—</option>
+                  <script>['155','165','175','185','195','205','215','225','235','245','255','265','275','285','295','305','315','325','335'].forEach(v=>document.write(`<option>${v}</option>`))</script>
+                </select>
+                <div class="size-sel-label">Width mm</div>
+              </div>
+              <div>
+                <select class="size-sel" id="f-aspect" onchange="updateSize()">
+                  <option value="">—</option>
+                  <script>['25','30','35','40','45','50','55','60','65','70','75','80'].forEach(v=>document.write(`<option>${v}</option>`))</script>
+                </select>
+                <div class="size-sel-label">Aspect %</div>
+              </div>
+              <div>
+                <select class="size-sel" id="f-rim" onchange="updateSize()">
+                  <option value="">—</option>
+                  <script>['13','14','15','16','17','18','19','20','21','22'].forEach(v=>document.write(`<option>${v}</option>`))</script>
+                </select>
+                <div class="size-sel-label">Rim inch</div>
+              </div>
+            </div>
+            <div id="size-error" class="field-error" style="display:none;margin-top:10px">Please select all three values or toggle below.</div>
+          </div>
+
+          <div class="toggle-row" id="sizeToggle" onclick="toggleSizeUnknown()">
+            <div class="toggle-info">
+              <strong>I don't know my size</strong>
+              <span>I'll send a photo of the sidewall</span>
+            </div>
+            <div class="toggle-pill"></div>
+          </div>
+
+          <div id="freetext-size" style="display:none">
+            <div class="field-card">
+              <label class="field-label">What do you see on the sidewall? (type it out)</label>
+              <input class="field-input" type="text" id="f-freesize" placeholder="e.g. P205/55R16 or just 195/65/15" autocomplete="off">
+              <div class="field-hint">Look for numbers like 205/55R16 on the side of your tyre</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="nextStep(1)">←</button>
+          <button class="btn-primary" onclick="validateAndNextStep(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Photos -->
+      <div id="step3" class="form-step" style="display:none">
+        <div class="form-header">
+          <span class="screen-label">Step 3 of 5</span>
+          <div class="screen-title">UPLOAD<br>PHOTOS</div>
+          <div class="screen-sub">Clear photos help us source the right tyre before we arrive</div>
+        </div>
+        <div class="progress-steps">
+          <div class="pstep done"></div><div class="pstep done"></div>
+          <div class="pstep done"></div><div class="pstep"></div><div class="pstep"></div>
+        </div>
+        <div class="form-body">
+          <div style="background:rgba(255,92,0,0.06);border:1px solid var(--border-orange);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--orange);margin-bottom:4px">
+            📸 Tap each card to take a photo or pick from gallery. Both required.
+          </div>
+          <div class="photo-upload-grid">
+            <!-- Tyre sidewall photo -->
+            <div class="photo-slot" id="slot-tyre" onclick="triggerUpload('tyre')">
+              <input type="file" id="upload-tyre" accept="image/*" capture="environment" onchange="handlePhoto(event,'tyre')" style="display:none">
+              <div class="slot-icon">🔤</div>
+              <div class="slot-label">Tyre<br>Sidewall</div>
+              <img class="slot-preview" id="preview-tyre" style="display:none">
+              <div class="slot-retake" id="retake-tyre" style="display:none">↺ Retake</div>
+            </div>
+            <!-- Rim photo -->
+            <div class="photo-slot" id="slot-rim" onclick="triggerUpload('rim')">
+              <input type="file" id="upload-rim" accept="image/*" capture="environment" onchange="handlePhoto(event,'rim')" style="display:none">
+              <div class="slot-icon">⭕</div>
+              <div class="slot-label">Rim<br>Condition</div>
+              <img class="slot-preview" id="preview-rim" style="display:none">
+              <div class="slot-retake" id="retake-rim" style="display:none">↺ Retake</div>
+            </div>
+          </div>
+          <div id="photo-error" class="field-error" style="display:none">Please upload both photos before continuing.</div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="nextStep(2)">←</button>
+          <button class="btn-primary" onclick="validateAndNextStep(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Location & Contact -->
+      <div id="step4" class="form-step" style="display:none">
+        <div class="form-header">
+          <span class="screen-label">Step 4 of 5</span>
+          <div class="screen-title">YOUR<br>DETAILS</div>
+          <div class="screen-sub">Where should we come? How do we reach you?</div>
+        </div>
+        <div class="progress-steps">
+          <div class="pstep done"></div><div class="pstep done"></div>
+          <div class="pstep done"></div><div class="pstep done"></div><div class="pstep"></div>
+        </div>
+        <div class="form-body">
+          <div class="field-card">
+            <label class="field-label">Full Name *</label>
+            <input class="field-input" type="text" id="f-name" placeholder="Your full name" autocomplete="name">
+            <div class="field-error" id="err-name">Please enter your name.</div>
+          </div>
+          <div class="field-card">
+            <label class="field-label">WhatsApp / Phone *</label>
+            <input class="field-input" type="tel" id="f-phone" placeholder="083 000 0000" autocomplete="tel">
+            <div class="field-error" id="err-phone">Please enter a valid SA mobile number.</div>
+          </div>
+          <div class="field-card">
+            <label class="field-label">Street Address *</label>
+            <input class="field-input" type="text" id="f-street" placeholder="12 Main Road" autocomplete="street-address">
+            <div class="field-error" id="err-street">Please enter your street address.</div>
+          </div>
+          <div class="field-card">
+            <label class="field-label">Suburb *</label>
+            <input class="field-input" type="text" id="f-suburb" placeholder="Randburg, Sandton, Soweto..." autocomplete="off">
+            <div class="field-error" id="err-suburb">Please enter your suburb.</div>
+          </div>
+          <div class="field-card">
+            <label class="field-label">Preferred Time</label>
+            <div class="time-grid" style="margin-top:4px">
+              <div class="time-opt sel" id="t-morning" onclick="selTime('morning')">
+                <span class="time-emoji">🌅</span>
+                <span class="time-name">Morning</span>
+                <span class="time-range">8am–12pm</span>
+              </div>
+              <div class="time-opt" id="t-afternoon" onclick="selTime('afternoon')">
+                <span class="time-emoji">☀️</span>
+                <span class="time-name">Afternoon</span>
+                <span class="time-range">12pm–5pm</span>
+              </div>
+              <div class="time-opt" id="t-flexible" onclick="selTime('flexible')">
+                <span class="time-emoji">🕐</span>
+                <span class="time-name">Flexible</span>
+                <span class="time-range">Anytime</span>
+              </div>
+            </div>
+          </div>
+          <div class="field-card">
+            <label class="field-label">Notes (optional)</label>
+            <textarea class="field-input" id="f-notes" placeholder="Gate code, tyre damage description, anything else..."></textarea>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="nextStep(3)">←</button>
+          <button class="btn-primary" onclick="validateAndNextStep(4)">Review →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Review & Submit -->
+      <div id="step5" class="form-step" style="display:none">
+        <div class="form-header">
+          <span class="screen-label">Step 5 of 5</span>
+          <div class="screen-title">REVIEW<br>&amp; SEND</div>
+          <div class="screen-sub">Check everything looks right</div>
+        </div>
+        <div class="progress-steps">
+          <div class="pstep done"></div><div class="pstep done"></div>
+          <div class="pstep done"></div><div class="pstep done"></div><div class="pstep done"></div>
+        </div>
+        <div id="review-content"></div>
+        <div class="form-nav" style="padding-top:8px">
+          <button class="btn-back" onclick="nextStep(4)">←</button>
+          <button class="btn-primary" id="submitBtn" onclick="submitRequest()">
+            <div class="btn-spinner" id="submitSpinner"></div>
+            <span id="submitLabel">SUBMIT REQUEST</span>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /scroll-content -->
+  </div><!-- /screen-request -->
+
+  <!-- ════════════════════════════════════
+       SCREEN: SUCCESS
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-success" style="justify-content:center;align-items:center;padding:40px 24px">
+    <div class="scroll-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px">
+      <div class="success-ring">✅</div>
+      <div class="success-ref" id="success-ref">TN-0001</div>
+      <div class="success-title">REQUEST<br>SENT!</div>
+      <p class="success-msg">
+        We've received your request and will<br>
+        <strong>call you within 2 hours</strong> to confirm<br>
+        availability and quote.
+      </p>
+      <button class="wa-btn" onclick="openWhatsApp()">
+        💬 Open WhatsApp
+      </button>
+      <button class="outline-btn" onclick="goTo('screen-home');resetForm()">← Back to home</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN: ADMIN (PIN + Dashboard)
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-admin">
+    <div class="scroll-content">
+
+      <!-- PIN Login -->
+      <div id="admin-pin-view">
+        <div class="pin-wrap">
+          <div class="pin-logo">TYRES NOW!</div>
+          <div class="pin-sub">Admin Panel — Enter PIN to continue</div>
+          <div class="pin-dots" id="pinDots">
+            <div class="pin-dot" id="pd0"></div>
+            <div class="pin-dot" id="pd1"></div>
+            <div class="pin-dot" id="pd2"></div>
+            <div class="pin-dot" id="pd3"></div>
+          </div>
+          <div class="pin-pad">
+            <div class="pin-key" onclick="pinKey(1)">1<div class="pin-key-sub"></div></div>
+            <div class="pin-key" onclick="pinKey(2)">2<div class="pin-key-sub">ABC</div></div>
+            <div class="pin-key" onclick="pinKey(3)">3<div class="pin-key-sub">DEF</div></div>
+            <div class="pin-key" onclick="pinKey(4)">4<div class="pin-key-sub">GHI</div></div>
+            <div class="pin-key" onclick="pinKey(5)">5<div class="pin-key-sub">JKL</div></div>
+            <div class="pin-key" onclick="pinKey(6)">6<div class="pin-key-sub">MNO</div></div>
+            <div class="pin-key" onclick="pinKey(7)">7<div class="pin-key-sub">PQRS</div></div>
+            <div class="pin-key" onclick="pinKey(8)">8<div class="pin-key-sub">TUV</div></div>
+            <div class="pin-key" onclick="pinKey(9)">9<div class="pin-key-sub">WXYZ</div></div>
+            <div class="pin-key ghost"></div>
+            <div class="pin-key" onclick="pinKey(0)">0</div>
+            <div class="pin-key del" onclick="pinDel()">⌫</div>
+          </div>
+          <div class="pin-err" id="pinErr"></div>
+          <button class="outline-btn" onclick="goTo('screen-home')" style="max-width:240px;margin-top:24px">← Back</button>
+        </div>
+      </div>
+
+      <!-- Dashboard (shown after PIN) -->
+      <div id="admin-dash-view" style="display:none">
+        <div class="admin-topbar">
+          <div>
+            <div class="admin-title">JOB INBOX</div>
+            <div class="admin-subtitle">Tyres Now! — Admin</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <button class="admin-logout" onclick="adminLogout()">Logout</button>
+            <button class="admin-logout" onclick="loadJobs(currentFilter)" style="color:var(--orange);border-color:var(--border-orange)">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+          <div class="filter-tab active" onclick="filterJobs('all',this)">All <span class="tab-n" id="cnt-all">0</span></div>
+          <div class="filter-tab" onclick="filterJobs('pending',this)">Pending <span class="tab-n" id="cnt-pending">0</span></div>
+          <div class="filter-tab" onclick="filterJobs('sourcing',this)">Sourcing <span class="tab-n" id="cnt-sourcing">0</span></div>
+          <div class="filter-tab" onclick="filterJobs('confirmed',this)">Confirmed <span class="tab-n" id="cnt-confirmed">0</span></div>
+          <div class="filter-tab" onclick="filterJobs('complete',this)">Done <span class="tab-n" id="cnt-complete">0</span></div>
+        </div>
+        <div class="jobs-list" id="jobsList"></div>
+      </div>
+
+      <!-- Job Detail -->
+      <div id="admin-detail-view" style="display:none">
+        <div class="detail-topbar">
+          <div class="detail-back" onclick="showAdminView('dash')">←</div>
+          <div>
+            <div class="detail-ref" id="dRef"></div>
+          </div>
+          <div id="dBadge" class="status-pill sp-pending" style="margin-left:auto">Pending</div>
+        </div>
+        <div id="detailContent" style="padding-bottom:32px"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       BOTTOM NAVBAR
+  ════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="nav-item active" id="nav-home" onclick="navTo('home')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" id="nav-request" onclick="navTo('request')">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Request</span>
+    </div>
+    <div class="nav-item" id="nav-admin" onclick="navTo('admin')">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Admin</span>
+      <div class="nav-badge" id="pendingBadge" style="display:none">!</div>
+    </div>
+  </nav>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURATION — REPLACE THESE WITH YOUR REAL VALUES
+// ═══════════════════════════════════════════════════════════
+const CONFIG = {
+  supabaseUrl:  'https://qxbsvegcmsjxafgcsdtv.supabase.co',     // e.g. https://xxxx.supabase.co
+  supabaseKey:  'sb_publishable_YPP1LeKWaNOgrGjJS56Zuw_n5AYi1rT', // your anon/public key
+  ownerPhone:   '27822279048',   // e.g. 27831234567 (no +, no spaces)
+  callMeBotKey: '9719691', // from callmebot.com
+  adminPin:     '1128',                   // change this!
+};
+
+// ═══════════════════════════════════════════════════════════
+//  SUPABASE INIT
+// ═══════════════════════════════════════════════════════════
+let db = null;
+let isConfigured = false;
+
+function initSupabase() {
+  if (CONFIG.supabaseUrl.startsWith('YOUR') || CONFIG.supabaseKey.startsWith('YOUR')) {
+    document.getElementById('configBanner').classList.add('show');
+    isConfigured = false;
+    return;
+  }
+  try {
+    const { createClient } = supabase;
+    db = createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+    isConfigured = true;
+  } catch(e) {
+    console.error('Supabase init failed:', e);
+    isConfigured = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let state = {
+  step: 1,
+  sizeUnknown: false,
+  selectedTime: 'morning',
+  photoTyre: null,   // base64
+  photoRim: null,    // base64
+  adminLoggedIn: false,
+  allJobs: [],
+  currentJob: null,
+};
+let currentFilter = 'all';
+let pinBuffer = '';
+
+// ═══════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function navTo(tab) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-' + tab).classList.add('active');
+  if (tab === 'home') goTo('screen-home');
+  else if (tab === 'request') { goTo('screen-request'); showStep(state.step); }
+  else if (tab === 'admin') goTo('screen-admin');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MULTI-STEP FORM
+// ═══════════════════════════════════════════════════════════
+function showStep(n) {
+  document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+  const el = document.getElementById('step' + n);
+  if (el) { el.style.display = 'block'; document.getElementById('requestScroll').scrollTo(0,0); }
+  state.step = n;
+  if (n === 5) buildReview();
+}
+
+function nextStep(n) { showStep(n); }
+
+function validateAndNextStep(currentStep) {
+  if (currentStep === 2) {
+    const w = document.getElementById('f-width').value;
+    const a = document.getElementById('f-aspect').value;
+    const r = document.getElementById('f-rim').value;
+    const fs = document.getElementById('f-freesize').value.trim();
+    const err = document.getElementById('size-error');
+    if (!state.sizeUnknown && (!w || !a || !r)) {
+      err.style.display = 'block';
+      return;
+    }
+    if (state.sizeUnknown && !fs) {
+      err.textContent = 'Please type what you see on the sidewall, or upload a photo in the next step.';
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    showStep(3);
+  } else if (currentStep === 3) {
+    const err = document.getElementById('photo-error');
+    if (!state.photoTyre || !state.photoRim) {
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    showStep(4);
+  } else if (currentStep === 4) {
+    const name = v('f-name'), phone = v('f-phone'), street = v('f-street'), suburb = v('f-suburb');
+    let ok = true;
+    show('err-name', !name);
+    if (!name) ok = false;
+    const phoneOk = /^0[6-8][0-9]{8}$/.test(phone.replace(/\s/g,''));
+    show('err-phone', !phoneOk);
+    if (!phoneOk) ok = false;
+    show('err-street', !street);
+    if (!street) ok = false;
+    show('err-suburb', !suburb);
+    if (!suburb) ok = false;
+    if (ok) showStep(5);
+  }
+}
+
+function v(id) { return document.getElementById(id).value.trim(); }
+function show(id, visible) { document.getElementById(id).style.display = visible ? 'block' : 'none'; }
+
+// ═══════════════════════════════════════════════════════════
+//  TYRE SIZE
+// ═══════════════════════════════════════════════════════════
+function updateSize() {
+  const w = document.getElementById('f-width').value;
+  const a = document.getElementById('f-aspect').value;
+  const r = document.getElementById('f-rim').value;
+  document.getElementById('sizeDisplay').textContent = 
+    `${w||'—'}/${a||'—'} R${r||'—'}`;
+}
+
+function toggleSizeUnknown() {
+  state.sizeUnknown = !state.sizeUnknown;
+  const tog = document.getElementById('sizeToggle');
+  const picker = document.getElementById('size-picker-card');
+  const freetext = document.getElementById('freetext-size');
+  tog.classList.toggle('on', state.sizeUnknown);
+  picker.style.display = state.sizeUnknown ? 'none' : 'block';
+  freetext.style.display = state.sizeUnknown ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PHOTO HANDLING
+// ═══════════════════════════════════════════════════════════
+function triggerUpload(type) {
+  document.getElementById('upload-' + type).click();
+}
+
+function handlePhoto(event, type) {
+  const file = event.target.files[0];
+  if (!file) return;
+  compressAndStore(file, type);
+}
+
+function compressAndStore(file, type) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const b64 = canvas.toDataURL('image/jpeg', 0.75);
+      if (type === 'tyre') state.photoTyre = b64;
+      else state.photoRim = b64;
+      // Show preview
+      const preview = document.getElementById('preview-' + type);
+      const retake = document.getElementById('retake-' + type);
+      const slot = document.getElementById('slot-' + type);
+      preview.src = b64; preview.style.display = 'block';
+      retake.style.display = 'block';
+      slot.classList.add('filled');
+      // Hide icon+label
+      slot.querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = 'none');
+      document.getElementById('photo-error').style.display = 'none';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TIME SELECTION
+// ═══════════════════════════════════════════════════════════
+function selTime(t) {
+  state.selectedTime = t;
+  ['morning','afternoon','flexible'].forEach(x =>
+    document.getElementById('t-' + x).classList.toggle('sel', x === t)
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+//  REVIEW BUILDER
+// ═══════════════════════════════════════════════════════════
+function buildReview() {
+  const w = v('f-width'), a = v('f-aspect'), r = v('f-rim');
+  const freesize = v('f-freesize');
+  const sizeStr = state.sizeUnknown
+    ? (freesize || 'Unknown — see photo')
+    : (w && a && r ? `${w}/${a} R${r}` : 'See sidewall photo');
+
+  const timeLabels = { morning:'Morning (8am–12pm)', afternoon:'Afternoon (12pm–5pm)', flexible:'Flexible' };
+
+  document.getElementById('review-content').innerHTML = `
+    <div class="review-section">
+      <div class="review-head"><span class="review-head-label">🚗 Vehicle</span><span class="review-edit" onclick="nextStep(1)">Edit</span></div>
+      <div class="review-body">
+        <div class="review-row"><span class="review-key">Vehicle</span><span class="review-val">${[v('f-make'),v('f-model'),v('f-year')].filter(Boolean).join(' ') || '—'}</span></div>
+        <div class="review-row"><span class="review-key">Tyre size</span><span class="review-val ${state.sizeUnknown ? '' : 'review-size-val'}">${sizeStr}</span></div>
+      </div>
+    </div>
+    <div class="review-section">
+      <div class="review-head"><span class="review-head-label">📸 Photos</span><span class="review-edit" onclick="nextStep(3)">Edit</span></div>
+      <div class="review-body">
+        <div class="review-photos">
+          ${state.photoTyre ? `<img class="review-photo-thumb" src="${state.photoTyre}">` : '<div class="review-photo-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">🔤</div>'}
+          ${state.photoRim ? `<img class="review-photo-thumb" src="${state.photoRim}">` : '<div class="review-photo-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">⭕</div>'}
+        </div>
+      </div>
+    </div>
+    <div class="review-section">
+      <div class="review-head"><span class="review-head-label">📍 Location & Contact</span><span class="review-edit" onclick="nextStep(4)">Edit</span></div>
+      <div class="review-body">
+        <div class="review-row"><span class="review-key">Name</span><span class="review-val">${v('f-name')}</span></div>
+        <div class="review-row"><span class="review-key">Phone</span><span class="review-val">${v('f-phone')}</span></div>
+        <div class="review-row"><span class="review-key">Address</span><span class="review-val">${v('f-street')}, ${v('f-suburb')}, Johannesburg</span></div>
+        <div class="review-row"><span class="review-key">Time</span><span class="review-val">${timeLabels[state.selectedTime]}</span></div>
+        ${v('f-notes') ? `<div class="review-row"><span class="review-key">Notes</span><span class="review-val">${v('f-notes')}</span></div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SUBMIT REQUEST
+// ═══════════════════════════════════════════════════════════
+async function submitRequest() {
+  const btn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('submitSpinner');
+  const label = document.getElementById('submitLabel');
+
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  label.textContent = 'SENDING...';
+  showLoading('Saving your request...');
+
+  const w = v('f-width'), a = v('f-aspect'), r = v('f-rim');
+  const freesize = v('f-freesize');
+  const tyreSize = state.sizeUnknown
+    ? (freesize || 'Unknown')
+    : (w && a && r ? `${w}/${a} R${r}` : 'Unknown');
+
+  const ref = 'TN-' + Date.now().toString().slice(-6);
+  const vehicle = [v('f-make'), v('f-model'), v('f-year')].filter(Boolean).join(' ') || 'Not specified';
+
+  const jobData = {
+    reference: ref,
+    customer_name: v('f-name'),
+    customer_phone: v('f-phone'),
+    vehicle: vehicle,
+    tyre_size: tyreSize,
+    tyre_size_unknown: state.sizeUnknown,
+    address: v('f-street'),
+    suburb: v('f-suburb'),
+    preferred_time: state.selectedTime,
+    notes: v('f-notes'),
+    photo_tyre: state.photoTyre || null,
+    photo_rim: state.photoRim || null,
+    status: 'pending',
+  };
+
+  try {
+    if (!isConfigured) {
+      // Demo mode — simulate success
+      await new Promise(r => setTimeout(r, 1800));
+      hideLoading();
+      document.getElementById('success-ref').textContent = ref;
+      state.lastJob = jobData;
+      showStep(1); // reset step for next time
+      resetForm();
+      goTo('screen-success');
+      showToast('✓ Request submitted (demo mode)', 'info');
+      return;
+    }
+
+    // Real Supabase insert
+    showLoading('Saving to database...');
+    const { data, error } = await db.from('jobs').insert([jobData]).select();
+    if (error) throw error;
+
+    // Send WhatsApp to owner via CallMeBot
+    showLoading('Notifying owner via WhatsApp...');
+    const ownerMsg = encodeURIComponent(
+      `🚨 New Tyre Request!\n` +
+      `Ref: ${ref}\n` +
+      `Customer: ${v('f-name')} | ${v('f-phone')}\n` +
+      `Tyre: ${tyreSize}\n` +
+      `Vehicle: ${vehicle}\n` +
+      `Location: ${v('f-street')}, ${v('f-suburb')}\n` +
+      `Time pref: ${state.selectedTime}\n` +
+      `Notes: ${v('f-notes') || 'None'}`
+    );
+    if (!CONFIG.callMeBotKey.startsWith('YOUR')) {
+      await fetch(`https://api.callmebot.com/whatsapp.php?phone=${CONFIG.ownerPhone}&text=${ownerMsg}&apikey=${CONFIG.callMeBotKey}`)
+        .catch(() => {}); // non-blocking
+    }
+
+    // Customer confirmation (open WhatsApp deep link)
+    state.customerPhone = v('f-phone').replace(/\s/g,'').replace(/^0/,'27');
+    state.customerRef = ref;
+
+    hideLoading();
+    document.getElementById('success-ref').textContent = ref;
+    state.lastJob = jobData;
+    resetForm();
+    navTo('home');
+    goTo('screen-success');
+    showToast('✓ Request submitted successfully!', 'success');
+
+  } catch(err) {
+    hideLoading();
+    console.error(err);
+    showToast('Failed to submit. Check your connection and try again.', 'error');
+    btn.disabled = false;
+    spinner.style.display = 'none';
+    label.textContent = 'RETRY';
+  }
+}
+
+function openWhatsApp() {
+  const phone = state.customerPhone || '27800000000';
+  const ref = state.customerRef || 'TN-XXXXX';
+  const msg = encodeURIComponent(
+    `Hi! 👋 Your Tyres Now! request ${ref} has been received.\n\n` +
+    `We'll call you within 2 hours to confirm availability and provide a quote.\n\n` +
+    `Thank you for choosing Tyres Now! 🔧`
+  );
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+}
+
+function resetForm() {
+  document.getElementById('f-make').value = '';
+  document.getElementById('f-model').value = '';
+  document.getElementById('f-year').value = '';
+  document.getElementById('f-width').value = '';
+  document.getElementById('f-aspect').value = '';
+  document.getElementById('f-rim').value = '';
+  document.getElementById('f-freesize').value = '';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-phone').value = '';
+  document.getElementById('f-street').value = '';
+  document.getElementById('f-suburb').value = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('sizeDisplay').textContent = '— / — R—';
+  state.photoTyre = null; state.photoRim = null;
+  state.sizeUnknown = false;
+  state.selectedTime = 'morning';
+  ['tyre','rim'].forEach(t => {
+    document.getElementById('preview-' + t).style.display = 'none';
+    document.getElementById('retake-' + t).style.display = 'none';
+    document.getElementById('slot-' + t).classList.remove('filled');
+    document.getElementById('slot-' + t).querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = '');
+    document.getElementById('upload-' + t).value = '';
+  });
+  const tog = document.getElementById('sizeToggle');
+  tog.classList.remove('on');
+  document.getElementById('size-picker-card').style.display = 'block';
+  document.getElementById('freetext-size').style.display = 'none';
+  selTime('morning');
+  // Reset submit button
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  document.getElementById('submitSpinner').style.display = 'none';
+  document.getElementById('submitLabel').textContent = 'SUBMIT REQUEST';
+  showStep(1);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LOADING OVERLAY
+// ═══════════════════════════════════════════════════════════
+function showLoading(msg) {
+  document.getElementById('loadingText').textContent = msg || 'Loading...';
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ADMIN PIN
+// ═══════════════════════════════════════════════════════════
+function pinKey(n) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += n;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(() => {
+      if (pinBuffer === CONFIG.adminPin) {
+        pinBuffer = '';
+        updatePinDots();
+        document.getElementById('pinErr').textContent = '';
+        state.adminLoggedIn = true;
+        showAdminView('dash');
+        loadJobs('all');
+      } else {
+        document.getElementById('pinErr').textContent = '✕ Incorrect PIN. Try again.';
+        pinBuffer = '';
+        setTimeout(updatePinDots, 300);
+      }
+    }, 150);
+  }
+}
+function pinDel() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); }
+function updatePinDots() {
+  for (let i=0;i<4;i++)
+    document.getElementById('pd'+i).classList.toggle('filled', i < pinBuffer.length);
+}
+function adminLogout() {
+  state.adminLoggedIn = false;
+  pinBuffer = ''; updatePinDots();
+  showAdminView('pin');
+}
+function showAdminView(view) {
+  document.getElementById('admin-pin-view').style.display = view==='pin'?'block':'none';
+  document.getElementById('admin-dash-view').style.display = view==='dash'?'block':'none';
+  document.getElementById('admin-detail-view').style.display = view==='detail'?'block':'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LOAD JOBS FROM SUPABASE
+// ═══════════════════════════════════════════════════════════
+async function loadJobs(filter) {
+  currentFilter = filter;
+  if (!isConfigured) {
+    // Demo data
+    state.allJobs = [
+      { id:'demo1', reference:'TN-001', customer_name:'Sipho Dlamini', customer_phone:'083 456 7890', vehicle:'Toyota Corolla 2022', tyre_size:'205/55 R16', suburb:'Linden', preferred_time:'morning', address:'14 Linden Ave', notes:'Gate code 1234', status:'pending', created_at: new Date().toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'' },
+      { id:'demo2', reference:'TN-002', customer_name:'Thabo Mokoena', customer_phone:'072 111 2233', vehicle:'VW Polo 2020', tyre_size:'185/65 R15', suburb:'Sandton', preferred_time:'afternoon', address:'7 Maude St', notes:'', status:'sourcing', created_at: new Date(Date.now()-86400000).toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'' },
+      { id:'demo3', reference:'TN-003', customer_name:'Lindiwe Khumalo', customer_phone:'061 999 8877', vehicle:'BMW 3 Series 2019', tyre_size:'225/45 R17', suburb:'Bryanston', preferred_time:'flexible', address:'22 William Nicol', notes:'Flat tyre, car in basement', status:'confirmed', created_at: new Date(Date.now()-172800000).toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'Sourced Goodyear R1200' },
+    ];
+    renderJobs(filter);
+    updateTabCounts();
+    return;
+  }
+  try {
+    const { data, error } = await db.from('jobs').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    state.allJobs = data || [];
+    renderJobs(filter);
+    updateTabCounts();
+    // Update pending badge
+    const pendingCount = state.allJobs.filter(j => j.status === 'pending').length;
+    const badge = document.getElementById('pendingBadge');
+    badge.style.display = pendingCount > 0 ? 'flex' : 'none';
+    badge.textContent = pendingCount;
+  } catch(e) {
+    showToast('Could not load jobs: ' + e.message, 'error');
+  }
+}
+
+function updateTabCounts() {
+  const all = state.allJobs;
+  document.getElementById('cnt-all').textContent = all.length;
+  ['pending','sourcing','confirmed','complete'].forEach(s =>
+    document.getElementById('cnt-'+s).textContent = all.filter(j=>j.status===s).length
+  );
+}
+
+function renderJobs(filter) {
+  const jobs = filter === 'all' ? state.allJobs : state.allJobs.filter(j => j.status === filter);
+  const list = document.getElementById('jobsList');
+  if (!jobs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No ${filter === 'all' ? '' : filter+' '}jobs yet</div></div>`;
+    return;
+  }
+  list.innerHTML = jobs.map(j => `
+    <div class="job-card" onclick="openJob('${j.id}')">
+      <div class="job-card-left">
+        <div class="job-card-name">${j.customer_name}</div>
+        <div class="job-card-meta">
+          <span>${j.suburb || '—'}</span>
+          <span>·</span>
+          <span>${fmtDate(j.created_at)}</span>
+        </div>
+      </div>
+      <div class="job-card-right">
+        <div class="status-pill sp-${j.status}">${j.status}</div>
+        <div class="job-date">${j.reference}</div>
+      </div>
+      <div class="job-card-size" style="margin-left:4px;font-size:16px">${j.tyre_size||'?'}</div>
+    </div>
+  `).join('');
+}
+
+function filterJobs(filter, tab) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  if (tab) tab.classList.add('active');
+  renderJobs(filter);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-ZA', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  JOB DETAIL
+// ═══════════════════════════════════════════════════════════
+function openJob(id) {
+  const j = state.allJobs.find(x => String(x.id) === String(id));
+  if (!j) return;
+  state.currentJob = j;
+
+  document.getElementById('dRef').textContent = j.reference;
+  const badge = document.getElementById('dBadge');
+  badge.textContent = j.status.charAt(0).toUpperCase()+j.status.slice(1);
+  badge.className = 'status-pill sp-' + j.status;
+
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((j.address||'')+' '+(j.suburb||'')+' Johannesburg')}`;
+  const timeLabels = { morning:'Morning (8am–12pm)', afternoon:'Afternoon (12pm–5pm)', flexible:'Flexible' };
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-section">
+      <div class="ds-head">Customer</div>
+      <div class="ds-body">
+        <div class="ds-field"><span class="ds-key">Name</span><span class="ds-val">${j.customer_name}</span></div>
+        <div class="ds-field"><span class="ds-key">Phone</span><a class="call-btn" href="tel:${j.customer_phone}">📞 ${j.customer_phone}</a></div>
+        <div class="ds-field"><span class="ds-key">Time pref</span><span class="ds-val">${timeLabels[j.preferred_time]||j.preferred_time}</span></div>
+        ${j.notes ? `<div class="ds-field"><span class="ds-key">Notes</span><span class="ds-val">${j.notes}</span></div>` : ''}
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-head">Tyre & Vehicle</div>
+      <div class="ds-body">
+        <div class="ds-field"><span class="ds-key">Size</span><span class="ds-val" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--orange)">${j.tyre_size||'Unknown'}</span></div>
+        <div class="ds-field"><span class="ds-key">Vehicle</span><span class="ds-val">${j.vehicle||'—'}</span></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-head">Location</div>
+      <div class="ds-body">
+        <div class="ds-field"><span class="ds-key">Address</span><span class="ds-val">${j.address||''}, ${j.suburb||''}, Johannesburg</span></div>
+        <a class="maps-btn" href="${mapsUrl}" target="_blank">🗺 Navigate in Google Maps</a>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-head">Photos</div>
+      <div class="ds-body">
+        <div class="detail-photos">
+          <div class="detail-photo" onclick="${j.photo_tyre ? `openLightbox('${j.photo_tyre}')` : ''}">
+            ${j.photo_tyre ? `<img src="${j.photo_tyre}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">` : '<span style="font-size:11px;color:var(--muted);padding:8px;text-align:center">No tyre photo</span>'}
+          </div>
+          <div class="detail-photo" onclick="${j.photo_rim ? `openLightbox('${j.photo_rim}')` : ''}">
+            ${j.photo_rim ? `<img src="${j.photo_rim}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">` : '<span style="font-size:11px;color:var(--muted);padding:8px;text-align:center">No rim photo</span>'}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-head">Update Status</div>
+      <div class="ds-body">
+        <div class="status-grid">
+          ${['pending','sourcing','confirmed','complete'].map(s => `
+            <button class="status-btn ${j.status===s?'active-'+s:''}" id="sbtn-${s}" onclick="updateStatus('${j.id}','${s}')">
+              ${{pending:'⏳ Pending',sourcing:'🔍 Sourcing',confirmed:'✅ Confirmed',complete:'🏁 Complete'}[s]}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-head">Admin Notes</div>
+      <div class="ds-body">
+        <textarea class="admin-notes-ta" id="adminNotes" placeholder="Internal notes — not visible to customer...">${j.admin_notes||''}</textarea>
+        <button onclick="saveAdminNotes('${j.id}')" style="margin-top:8px;background:var(--orange-glow);border:1px solid var(--border-orange);color:var(--orange);padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif">Save Notes</button>
+      </div>
+    </div>
+  `;
+
+  showAdminView('detail');
+}
+
+async function updateStatus(id, status) {
+  const j = state.allJobs.find(x => String(x.id) === String(id));
+  if (!j) return;
+  
+  // Update UI immediately
+  j.status = status;
+  ['pending','sourcing','confirmed','complete'].forEach(s => {
+    const btn = document.getElementById('sbtn-' + s);
+    if (btn) btn.className = 'status-btn' + (s===status ? ' active-'+s : '');
+  });
+  const badge = document.getElementById('dBadge');
+  badge.textContent = status.charAt(0).toUpperCase()+status.slice(1);
+  badge.className = 'status-pill sp-' + status;
+
+  if (isConfigured) {
+    try {
+      const { error } = await db.from('jobs').update({ status }).eq('id', id);
+      if (error) throw error;
+    } catch(e) {
+      showToast('Status update failed: ' + e.message, 'error');
+      return;
+    }
+  }
+
+  // Notify customer via WhatsApp
+  const msgs = {
+    sourcing:  `Hi ${j.customer_name}! 🔍 We're busy sourcing your tyre (${j.tyre_size}). We'll confirm shortly. — Tyres Now!`,
+    confirmed: `Hi ${j.customer_name}! ✅ Great news — your tyre is confirmed! Our tech is on the way to ${j.suburb}. — Tyres Now!`,
+    complete:  `Hi ${j.customer_name}! 🏁 Your tyre fitting is complete. Thank you for choosing Tyres Now! 🔧`,
+  };
+  if (msgs[status] && !CONFIG.callMeBotKey.startsWith('YOUR')) {
+    const phone = j.customer_phone.replace(/\s/g,'').replace(/^0/,'27');
+    fetch(`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msgs[status])}&apikey=${CONFIG.callMeBotKey}`)
+      .catch(() => {});
+  }
+
+  showToast(`✓ Status updated to "${status}"`, 'success');
+  updateTabCounts();
+}
+
+async function saveAdminNotes(id) {
+  const notes = document.getElementById('adminNotes').value;
+  const j = state.allJobs.find(x => String(x.id) === String(id));
+  if (j) j.admin_notes = notes;
+  if (isConfigured) {
+    const { error } = await db.from('jobs').update({ admin_notes: notes }).eq('id', id);
+    if (error) { showToast('Failed to save notes', 'error'); return; }
+  }
+  showToast('Notes saved', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LIGHTBOX
+// ═══════════════════════════════════════════════════════════
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+initSupabase();
+showStep(1);
+</script>
+</body>
+</html>
