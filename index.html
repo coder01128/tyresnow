@@ -404,37 +404,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .toggle-row.on .toggle-pill { background: var(--gold); border-color: var(--gold); }
 .toggle-row.on .toggle-pill::after { left: 25px; background: #000; }
 
-/* Photo upload */
-.photo-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.photo-slot {
-  background: var(--dark3);
-  border: 2px dashed rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  aspect-ratio: 4/3;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 8px; cursor: pointer;
-  transition: all 0.2s; position: relative; overflow: hidden;
-}
-.photo-slot:hover { border-color: var(--border-gold); }
-.photo-slot.filled { border-style: solid; border-color: rgba(255,215,0,0.45); }
-.photo-slot input[type=file] {
-  position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0;
-}
-.slot-icon { font-size: 30px; }
-.slot-label {
-  font-size: 13px; font-weight: 700; color: var(--muted);
-  text-align: center; padding: 0 8px;
-  text-transform: uppercase; letter-spacing: 0.07em;
-}
-.slot-preview { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; }
-.slot-retake {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(0,0,0,0.75); color: var(--gold);
-  font-size: 13px; font-weight: 800; text-transform: uppercase;
-  text-align: center; padding: 7px; letter-spacing: 0.07em;
-}
-
 /* Time selector */
 .time-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 .time-opt {
@@ -474,12 +443,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 30px; font-weight: 900; color: var(--gold);
 }
-.review-photos { display: flex; gap: 10px; }
-.review-photo-thumb {
-  width: 68px; height: 68px; object-fit: cover;
-  border-radius: 9px; border: 1px solid rgba(255,255,255,0.1);
-}
-
 /* Form nav buttons */
 .form-nav {
   display: flex; gap: 12px;
@@ -566,7 +529,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .toast.error   { background: rgba(255,61,61,0.15); border: 1px solid rgba(255,61,61,0.35); color: #FF6E6E; }
 .toast.info    { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.35); color: var(--gold); }
 
-/* Info card (photo + sending instructions) */
+/* Info card (sending instructions) */
 .info-card {
   background: rgba(255,215,0,0.05); border: 1px solid var(--border-gold);
   border-radius: var(--radius); padding: 16px;
@@ -580,15 +543,26 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .info-card strong { color: #fff; font-weight: 700; }
 .info-card .muted { color: var(--muted); }
 .review-info { margin: 0 24px 4px; }
-.save-links { display: flex; gap: 8px; margin-top: 10px; }
-.save-links a {
-  flex: 1; text-align: center; text-decoration: none;
-  border: 1px solid var(--border-gold); color: var(--gold);
-  border-radius: var(--radius-sm); padding: 10px 6px;
-  font-size: 13px; font-weight: 800;
-}
 .success-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .success-actions .outline-btn { margin-bottom: 0; }
+/* Photo reminder pop-up */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center; padding: 24px;
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+  width: 100%; max-width: 360px;
+  background: var(--card); border: 1px solid var(--border-gold);
+  border-radius: var(--radius); padding: 28px 22px 22px;
+  text-align: center; display: flex; flex-direction: column; gap: 12px;
+  animation: popIn 0.3s ease;
+}
+.modal-icon { font-size: 44px; line-height: 1; }
+.modal-msg { font-size: 19px; font-weight: 700; color: #fff; line-height: 1.4; }
+.modal-hint { font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
+.modal .btn-primary { flex: none; width: 100%; }
 </style>
 </head>
 <body>
@@ -598,6 +572,16 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="photoModal" role="dialog" aria-modal="true" aria-labelledby="photoModalMsg" onclick="if (event.target === this) closePhotoModal()">
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">📷</div>
+    <p class="modal-msg" id="photoModalMsg">Please send a photo of the tyre sidewall and rim with your WhatsApp message</p>
+    <p class="modal-hint">In WhatsApp, tap 📎 (Android) or + (iPhone), then choose Gallery or Camera.</p>
+    <button class="btn-primary" id="photoModalOk" onclick="confirmSend()">OK, open WhatsApp</button>
+    <button class="outline-btn" onclick="closePhotoModal()">Cancel</button>
+  </div>
+</div>
 
 <!-- APP -->
 <div class="app">
@@ -650,11 +634,11 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
         <div class="how-steps">
           <div class="how-step">
             <div class="how-num">1</div>
-            <div class="how-text"><strong>Fill in your request</strong><span>Your tyre size, location &amp; 2 photos</span></div>
+            <div class="how-text"><strong>Fill in your request</strong><span>Your car, tyre size &amp; location</span></div>
           </div>
           <div class="how-step">
             <div class="how-num">2</div>
-            <div class="how-text"><strong>Send it on WhatsApp</strong><span>We call you back within 2 hours to confirm &amp; quote</span></div>
+            <div class="how-text"><strong>Send it on WhatsApp</strong><span>With a photo of your tyre &amp; rim. We call back within 2 hours</span></div>
           </div>
           <div class="how-step">
             <div class="how-num">3</div>
@@ -672,7 +656,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
       <!-- STEP 1: Vehicle -->
       <div id="step1" class="form-step">
         <div class="form-header">
-          <span class="screen-label">Step 1 of 5</span>
+          <span class="screen-label">Step 1 of 4</span>
           <div class="screen-title">YOUR<br>VEHICLE</div>
           <div class="screen-sub">Tell us about your car (optional but helpful)</div>
         </div>
@@ -681,7 +665,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
           <div class="pstep" id="ps2"></div>
           <div class="pstep" id="ps3"></div>
           <div class="pstep" id="ps4"></div>
-          <div class="pstep" id="ps5"></div>
         </div>
         <div class="form-body">
           <div class="field-card">
@@ -709,13 +692,13 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
       <!-- STEP 2: Tyre Size -->
       <div id="step2" class="form-step" style="display:none">
         <div class="form-header">
-          <span class="screen-label">Step 2 of 5</span>
+          <span class="screen-label">Step 2 of 4</span>
           <div class="screen-title">TYRE<br>SIZE</div>
           <div class="screen-sub">Check the sidewall of your current tyre</div>
         </div>
         <div class="progress-steps">
           <div class="pstep done"></div><div class="pstep done"></div>
-          <div class="pstep"></div><div class="pstep"></div><div class="pstep"></div>
+          <div class="pstep"></div><div class="pstep"></div>
         </div>
         <div class="form-body">
           <div class="field-card" id="size-picker-card">
@@ -770,62 +753,16 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
         </div>
       </div>
 
-      <!-- STEP 3: Photos -->
+      <!-- STEP 3: Location & Contact -->
       <div id="step3" class="form-step" style="display:none">
         <div class="form-header">
-          <span class="screen-label">Step 3 of 5</span>
-          <div class="screen-title">UPLOAD<br>PHOTOS</div>
-          <div class="screen-sub">Clear photos help us source the right tyre before we arrive</div>
-        </div>
-        <div class="progress-steps">
-          <div class="pstep done"></div><div class="pstep done"></div>
-          <div class="pstep done"></div><div class="pstep"></div><div class="pstep"></div>
-        </div>
-        <div class="form-body">
-          <div class="info-card">
-            <div class="info-card-title">📸 Take your photos first</div>
-            <ol>
-              <li>Use your <strong>phone's camera</strong> to take a clear photo of the <strong>tyre sidewall</strong> (the numbers) and one of the <strong>rim</strong>.</li>
-              <li>Tap each card below and <strong>choose the photo from your gallery</strong>.</li>
-            </ol>
-            <p class="muted" style="margin-top:8px">Keep these photos in your gallery. You'll send them to us on WhatsApp at the end.</p>
-          </div>
-          <div class="photo-upload-grid">
-            <!-- Tyre sidewall photo -->
-            <div class="photo-slot" id="slot-tyre" onclick="triggerUpload('tyre')">
-              <input type="file" id="upload-tyre" accept="image/*" onchange="handlePhoto(event,'tyre')" style="display:none">
-              <div class="slot-icon">🔤</div>
-              <div class="slot-label">Tyre<br>Sidewall</div>
-              <img class="slot-preview" id="preview-tyre" style="display:none">
-              <div class="slot-retake" id="retake-tyre" style="display:none">↺ Retake</div>
-            </div>
-            <!-- Rim photo -->
-            <div class="photo-slot" id="slot-rim" onclick="triggerUpload('rim')">
-              <input type="file" id="upload-rim" accept="image/*" onchange="handlePhoto(event,'rim')" style="display:none">
-              <div class="slot-icon">⭕</div>
-              <div class="slot-label">Rim<br>Condition</div>
-              <img class="slot-preview" id="preview-rim" style="display:none">
-              <div class="slot-retake" id="retake-rim" style="display:none">↺ Retake</div>
-            </div>
-          </div>
-          <div id="photo-error" class="field-error" style="display:none">Please upload both photos before continuing.</div>
-        </div>
-        <div class="form-nav">
-          <button class="btn-back" onclick="nextStep(2)">←</button>
-          <button class="btn-primary" onclick="validateAndNextStep(3)">Next →</button>
-        </div>
-      </div>
-
-      <!-- STEP 4: Location & Contact -->
-      <div id="step4" class="form-step" style="display:none">
-        <div class="form-header">
-          <span class="screen-label">Step 4 of 5</span>
+          <span class="screen-label">Step 3 of 4</span>
           <div class="screen-title">YOUR<br>DETAILS</div>
           <div class="screen-sub">Where should we come? How do we reach you?</div>
         </div>
         <div class="progress-steps">
           <div class="pstep done"></div><div class="pstep done"></div>
-          <div class="pstep done"></div><div class="pstep done"></div><div class="pstep"></div>
+          <div class="pstep done"></div><div class="pstep"></div>
         </div>
         <div class="form-body">
           <div class="field-card">
@@ -874,33 +811,33 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
           </div>
         </div>
         <div class="form-nav">
-          <button class="btn-back" onclick="nextStep(3)">←</button>
-          <button class="btn-primary" onclick="validateAndNextStep(4)">Review →</button>
+          <button class="btn-back" onclick="nextStep(2)">←</button>
+          <button class="btn-primary" onclick="validateAndNextStep(3)">Review →</button>
         </div>
       </div>
 
-      <!-- STEP 5: Review & Submit -->
-      <div id="step5" class="form-step" style="display:none">
+      <!-- STEP 4: Review & Submit -->
+      <div id="step4" class="form-step" style="display:none">
         <div class="form-header">
-          <span class="screen-label">Step 5 of 5</span>
+          <span class="screen-label">Step 4 of 4</span>
           <div class="screen-title">REVIEW<br>&amp; SEND</div>
           <div class="screen-sub">Check everything looks right</div>
         </div>
         <div class="progress-steps">
           <div class="pstep done"></div><div class="pstep done"></div>
-          <div class="pstep done"></div><div class="pstep done"></div><div class="pstep done"></div>
+          <div class="pstep done"></div><div class="pstep done"></div>
         </div>
         <div id="review-content"></div>
         <div class="info-card review-info">
           <div class="info-card-title">💬 How sending works</div>
           <ol>
             <li>Tap <strong>Send on WhatsApp</strong> below. WhatsApp opens a chat with Tyres Now (<span class="wa-display"></span>) with your details already typed in.</li>
-            <li>Tap <strong>Send</strong> in WhatsApp.</li>
-            <li><strong>Come back to this page</strong> to send your 2 photos.</li>
+            <li>Attach a photo of your <strong>tyre sidewall</strong> and <strong>rim</strong> (tap 📎 or +).</li>
+            <li>Tap <strong>Send</strong>.</li>
           </ol>
         </div>
         <div class="form-nav" style="padding-top:16px">
-          <button class="btn-back" onclick="nextStep(4)">←</button>
+          <button class="btn-back" onclick="nextStep(3)">←</button>
           <button class="btn-primary" onclick="sendDetails()">Send on WhatsApp</button>
         </div>
       </div>
@@ -911,42 +848,17 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
   <!-- ═══ SCREEN: SUCCESS ═══ -->
   <div class="screen" id="screen-success" style="justify-content:center;align-items:center;padding:40px 24px">
     <div class="scroll-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px">
-      <div class="success-ring" id="success-icon">📷</div>
+      <div class="success-ring">✅</div>
       <div class="success-ref" id="success-ref">TN-0001</div>
-      <div class="success-title" id="success-title">NOW SEND<br>YOUR PHOTOS</div>
-      <p class="success-msg" id="success-msg">
-        Sent your details in WhatsApp? Great.<br>
-        <strong>Last step:</strong> send us your tyre and rim photos.
+      <div class="success-title">THANK<br>YOU!</div>
+      <p class="success-msg">
+        Once you've sent your details and <strong>tyre &amp; rim photos</strong> in WhatsApp,
+        we'll <strong>call you within 2 hours</strong> to confirm availability and quote.
       </p>
-
-      <button class="wa-btn" id="sharePhotosBtn" onclick="sharePhotos()" style="display:none">
-        📷 Send my 2 photos
-      </button>
-
-      <div class="info-card" style="width:100%">
-        <div class="info-card-title" id="manual-title">Or attach them yourself</div>
-        <ol>
-          <li>Open your WhatsApp chat with <strong>Tyres Now (<span class="wa-display"></span>)</strong>.</li>
-          <li>Tap <strong>📎</strong> (Android) or <strong>+</strong> (iPhone).</li>
-          <li>Choose <strong>Gallery</strong> or <strong>Photos</strong>.</li>
-          <li>Pick your <strong>tyre sidewall</strong> and <strong>rim</strong> photos, then tap <strong>Send</strong>.</li>
-        </ol>
-        <div id="save-photos" style="display:none">
-          <p class="muted" style="margin-top:10px">Photos not in your gallery? Save them to your phone first:</p>
-          <div class="save-links">
-            <a id="save-tyre" download>Save tyre photo</a>
-            <a id="save-rim" download>Save rim photo</a>
-          </div>
-        </div>
-      </div>
-
       <div class="success-actions">
         <button class="outline-btn" onclick="openChat()">💬 WhatsApp didn't open? Tap here</button>
-        <button class="outline-btn" onclick="finishRequest()">I've sent everything, back to home</button>
+        <button class="outline-btn" onclick="finishRequest()">Back to home</button>
       </div>
-      <p class="success-msg" style="margin:20px auto 0">
-        We'll <strong>call you within 2 hours</strong> to confirm availability and quote.
-      </p>
     </div>
   </div>
 
@@ -973,7 +885,6 @@ let state = {
   step: 1,
   sizeUnknown: false,
   selectedTime: 'morning',
-  photos: { tyre: null, rim: null },  // { file, url }
   ref: null,
 };
 
@@ -997,7 +908,7 @@ function showStep(n) {
   const el = document.getElementById('step' + n);
   if (el) { el.style.display = 'block'; document.getElementById('requestScroll').scrollTo(0,0); }
   state.step = n;
-  if (n === 5) buildReview();
+  if (n === 4) buildReview();
 }
 
 function nextStep(n) { showStep(n); }
@@ -1021,14 +932,6 @@ function validateAndNextStep(currentStep) {
     err.style.display = 'none';
     showStep(3);
   } else if (currentStep === 3) {
-    const err = document.getElementById('photo-error');
-    if (!state.photos.tyre || !state.photos.rim) {
-      err.style.display = 'block';
-      return;
-    }
-    err.style.display = 'none';
-    showStep(4);
-  } else if (currentStep === 4) {
     const name = v('f-name'), phone = v('f-phone'), street = v('f-street'), suburb = v('f-suburb');
     let ok = true;
     show('err-name', !name);
@@ -1040,7 +943,7 @@ function validateAndNextStep(currentStep) {
     if (!street) ok = false;
     show('err-suburb', !suburb);
     if (!suburb) ok = false;
-    if (ok) showStep(5);
+    if (ok) showStep(4);
   }
 }
 
@@ -1076,29 +979,6 @@ function vehicleLabel() {
   return [v('f-make'), v('f-model'), v('f-year')].filter(Boolean).join(' ') || 'Not specified';
 }
 
-function triggerUpload(type) {
-  document.getElementById('upload-' + type).click();
-}
-
-function handlePhoto(event, type) {
-  const original = event.target.files[0];
-  if (!original) return;
-  // Rename so the owner can tell the two photos apart in WhatsApp
-  const ext = (original.name.match(/\.[a-z0-9]+$/i) || ['.jpg'])[0];
-  const file = new File([original], (type === 'tyre' ? 'tyre-sidewall' : 'rim') + ext,
-                        { type: original.type || 'image/jpeg' });
-  if (state.photos[type]) URL.revokeObjectURL(state.photos[type].url);
-  state.photos[type] = { file, url: URL.createObjectURL(file) };
-
-  const preview = document.getElementById('preview-' + type);
-  const slot = document.getElementById('slot-' + type);
-  preview.src = state.photos[type].url; preview.style.display = 'block';
-  document.getElementById('retake-' + type).style.display = 'block';
-  slot.classList.add('filled');
-  slot.querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = 'none');
-  document.getElementById('photo-error').style.display = 'none';
-}
-
 function selTime(t) {
   state.selectedTime = t;
   ['morning','afternoon','flexible'].forEach(x =>
@@ -1107,7 +987,6 @@ function selTime(t) {
 }
 
 function buildReview() {
-  const p = state.photos;
   document.getElementById('review-content').innerHTML = `
     <div class="review-section">
       <div class="review-head"><span class="review-head-label">🚗 Vehicle</span><span class="review-edit" onclick="nextStep(1)">Edit</span></div>
@@ -1117,16 +996,7 @@ function buildReview() {
       </div>
     </div>
     <div class="review-section">
-      <div class="review-head"><span class="review-head-label">📸 Photos</span><span class="review-edit" onclick="nextStep(3)">Edit</span></div>
-      <div class="review-body">
-        <div class="review-photos">
-          ${p.tyre ? `<img class="review-photo-thumb" src="${p.tyre.url}" alt="Tyre sidewall">` : ''}
-          ${p.rim ? `<img class="review-photo-thumb" src="${p.rim.url}" alt="Rim">` : ''}
-        </div>
-      </div>
-    </div>
-    <div class="review-section">
-      <div class="review-head"><span class="review-head-label">📍 Location & Contact</span><span class="review-edit" onclick="nextStep(4)">Edit</span></div>
+      <div class="review-head"><span class="review-head-label">📍 Location & Contact</span><span class="review-edit" onclick="nextStep(3)">Edit</span></div>
       <div class="review-body">
         <div class="review-row"><span class="review-key">Name</span><span class="review-val">${esc(v('f-name'))}</span></div>
         <div class="review-row"><span class="review-key">Phone</span><span class="review-val">${esc(v('f-phone'))}</span></div>
@@ -1138,10 +1008,8 @@ function buildReview() {
   `;
 }
 
-// Sending: 1) details as pre-typed text to our number (wa.me / whatsapp://),
-// which also creates the chat so it tops the customer's share list;
-// 2) photos via the phone's share sheet, or attached from the gallery.
-// A wa.me link can only carry text.
+// Details go as pre-typed text to our number (wa.me / whatsapp://).
+// A wa.me link can only carry text, so the customer attaches the photos in WhatsApp.
 function buildMessage() {
   return [
     `🚗 New tyre request ${state.ref}`,
@@ -1153,60 +1021,37 @@ function buildMessage() {
     `Time: ${TIME_LABELS[state.selectedTime]}`,
     `Notes: ${v('f-notes') || 'None'}`,
     ``,
-    `📷 Sending my tyre & rim photos next.`,
+    `📷 Photos of my tyre sidewall & rim attached.`,
   ].join('\n');
 }
 
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+// Remind about photos before WhatsApp takes over the screen
 function sendDetails() {
+  document.getElementById('photoModal').classList.add('show');
+  document.getElementById('photoModalOk').focus();
+}
+
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('show');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePhotoModal(); });
+
+function confirmSend() {
+  closePhotoModal();
   state.ref = state.ref || 'TN-' + Date.now().toString().slice(-6);
   const text = encodeURIComponent(buildMessage());
-  // whatsapp:// opens the app without leaving this page, so the photos stay loaded
+  // whatsapp:// opens the app without leaving this page
   if (isMobile) location.href = `whatsapp://send?phone=${CONFIG.whatsappNumber}&text=${text}`;
   else window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${text}`, '_blank');
-  showPhotoStep();
+  document.getElementById('success-ref').textContent = state.ref;
+  goTo('screen-success');
 }
 
 // Fallback for when the app link did nothing (e.g. WhatsApp not installed)
 function openChat() {
   window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(buildMessage())}`, '_blank');
-}
-
-function photoFiles() { return [state.photos.tyre.file, state.photos.rim.file]; }
-
-function canSharePhotos() {
-  try { return !!(navigator.canShare && navigator.canShare({ files: photoFiles() })); }
-  catch { return false; }
-}
-
-function showPhotoStep() {
-  const shareable = canSharePhotos();
-  document.getElementById('success-ref').textContent = state.ref;
-  document.getElementById('success-icon').textContent = '📷';
-  document.getElementById('success-title').innerHTML = 'NOW SEND<br>YOUR PHOTOS';
-  document.getElementById('sharePhotosBtn').style.display = shareable ? 'flex' : 'none';
-  document.getElementById('manual-title').textContent = shareable ? 'Or attach them yourself' : 'Attach your photos in WhatsApp';
-  // Without a share sheet the customer needs the photos in their gallery
-  document.getElementById('save-photos').style.display = shareable ? 'none' : 'block';
-  ['tyre','rim'].forEach(t => {
-    const a = document.getElementById('save-' + t);
-    a.href = state.photos[t].url;
-    a.download = state.photos[t].file.name;
-  });
-  goTo('screen-success');
-}
-
-async function sharePhotos() {
-  try {
-    await navigator.share({ files: photoFiles(), text: `Photos for tyre request ${state.ref}` });
-    document.getElementById('success-icon').textContent = '✅';
-    document.getElementById('success-title').innerHTML = 'ALL<br>SENT!';
-    showToast('✓ Photos shared. Make sure you picked Tyres Now.', 'success');
-  } catch (err) {
-    if (err.name === 'AbortError') showToast('Photos not sent yet. Tap the button again.', 'info');
-    else showToast('Could not open sharing. Attach the photos from your gallery instead.', 'error');
-  }
 }
 
 function finishRequest() {
@@ -1218,15 +1063,6 @@ function resetForm() {
   ['f-make','f-model','f-year','f-width','f-aspect','f-rim','f-freesize',
    'f-name','f-phone','f-street','f-suburb','f-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('sizeDisplay').textContent = '— / — R—';
-  ['tyre','rim'].forEach(t => {
-    if (state.photos[t]) URL.revokeObjectURL(state.photos[t].url);
-    state.photos[t] = null;
-    document.getElementById('preview-' + t).style.display = 'none';
-    document.getElementById('retake-' + t).style.display = 'none';
-    document.getElementById('slot-' + t).classList.remove('filled');
-    document.getElementById('slot-' + t).querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = '');
-    document.getElementById('upload-' + t).value = '';
-  });
   state.ref = null;
   state.sizeUnknown = false;
   document.getElementById('sizeToggle').classList.remove('on');
