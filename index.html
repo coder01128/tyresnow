@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080808">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Tyres Now! – On-Site Tyre Fitting Johannesburg</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=Barlow+Semi+Condensed:wght@500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ═══════════════════════════════════════════
    DESIGN TOKENS — BLACK & GOLD THEME
@@ -26,7 +25,7 @@
   --border-gold: rgba(255,215,0,0.35);
   --text: #FFFFFF;
   --muted: #C4B47A;
-  --muted2: #7A6C42;
+  --muted2: #9C8B58;
   --green: #00C853;
   --blue: #2196F3;
   --red: #FF3D3D;
@@ -114,21 +113,12 @@ body {
 }
 .nav-icon { font-size: 24px; line-height: 1; }
 .nav-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--muted);
   transition: color 0.2s;
 }
 .nav-item.active .nav-label { color: var(--gold); }
 .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px var(--gold)); }
-.nav-badge {
-  position: absolute; top: 8px; right: calc(50% - 22px);
-  background: var(--gold); color: #000;
-  font-size: 9px; font-weight: 900;
-  width: 16px; height: 16px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
-.nav-item { position: relative; }
-
 /* ═══ SCROLL CONTAINER ═══ */
 .scroll-content {
   flex: 1;
@@ -149,29 +139,33 @@ body {
 .hero-top { padding: 52px 24px 0; }
 
 .brand-mark {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 12px;
 }
 .brand-icon {
-  width: 48px; height: 48px;
+  width: 60px; height: 60px;
   background: var(--gold);
-  border-radius: 12px;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
+  font-size: 32px;
 }
 .brand-name {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 24px; font-weight: 900;
+  font-size: 34px; font-weight: 900;
   color: var(--text); letter-spacing: 0.04em;
 }
 .brand-name span { color: var(--gold); }
+.brand-byline {
+  font-size: 14px; color: var(--muted); line-height: 1.45;
+  margin: 12px 0 28px;
+}
+.brand-byline strong { color: #fff; font-weight: 600; }
 
 .live-badge {
   display: inline-flex; align-items: center; gap: 7px;
   background: rgba(0,200,83,0.12);
   border: 1px solid rgba(0,200,83,0.3);
   color: #00e676;
-  font-size: 12px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   padding: 6px 14px; border-radius: 100px;
   letter-spacing: 0.06em; text-transform: uppercase;
   margin-bottom: 20px;
@@ -219,7 +213,7 @@ body {
   color: var(--gold); line-height: 1;
 }
 .stat-lbl {
-  font-size: 11px; color: #C4B47A;
+  font-size: 13px; color: #C4B47A;
   font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.06em; margin-top: 4px;
 }
@@ -253,9 +247,9 @@ body {
 
 .hero-phone {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  color: #C4B47A; font-size: 15px; padding: 12px;
+  color: #C4B47A; font-size: 22px; padding: 12px;
   text-decoration: none; border-radius: var(--radius-sm);
-  font-weight: 500;
+  font-weight: 600;
   transition: color 0.2s;
 }
 .hero-phone:hover { color: var(--gold); }
@@ -271,7 +265,7 @@ body {
   padding: 22px;
 }
 .how-title {
-  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.14em; color: var(--muted); margin-bottom: 18px;
 }
 .how-steps { display: flex; flex-direction: column; gap: 14px; }
@@ -295,7 +289,7 @@ body {
   margin-bottom: 24px;
 }
 .screen-label {
-  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.14em; color: var(--gold);
   margin-bottom: 8px; display: block;
 }
@@ -332,7 +326,7 @@ body {
 }
 .field-card:focus-within { border-color: var(--border-gold); }
 .field-label {
-  font-size: 12px; font-weight: 800;
+  font-size: 13px; font-weight: 800;
   text-transform: uppercase; letter-spacing: 0.12em;
   color: var(--muted); margin-bottom: 10px; display: block;
 }
@@ -346,7 +340,7 @@ body {
 .field-input::placeholder { color: var(--muted2); }
 select.field-input {
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A6C42' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239C8B58' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0 center;
   padding-right: 22px;
@@ -379,7 +373,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 }
 .size-sel:focus { border-color: var(--border-gold); }
 .size-sel-label {
-  font-size: 11px; color: var(--muted); text-align: center;
+  font-size: 13px; color: var(--muted); text-align: center;
   margin-top: 5px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -429,7 +423,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 }
 .slot-icon { font-size: 30px; }
 .slot-label {
-  font-size: 12px; font-weight: 700; color: var(--muted);
+  font-size: 13px; font-weight: 700; color: var(--muted);
   text-align: center; padding: 0 8px;
   text-transform: uppercase; letter-spacing: 0.07em;
 }
@@ -437,7 +431,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .slot-retake {
   position: absolute; bottom: 0; left: 0; right: 0;
   background: rgba(0,0,0,0.75); color: var(--gold);
-  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
   text-align: center; padding: 7px; letter-spacing: 0.07em;
 }
 
@@ -454,7 +448,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
   font-size: 13px; font-weight: 800; display: block;
   text-transform: uppercase; letter-spacing: 0.04em; color: #fff;
 }
-.time-range { font-size: 11px; color: var(--muted); display: block; margin-top: 3px; }
+.time-range { font-size: 13px; color: var(--muted); display: block; margin-top: 3px; }
 
 /* Review */
 .review-section {
@@ -468,7 +462,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
   background: rgba(255,255,255,0.03);
 }
 .review-head-label {
-  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.12em; color: var(--muted);
 }
 .review-edit { font-size: 13px; color: var(--gold); font-weight: 700; cursor: pointer; }
@@ -513,16 +507,6 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .btn-primary:hover { background: var(--gold-light); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.btn-spinner {
-  width: 22px; height: 22px;
-  border: 2px solid rgba(0,0,0,0.3);
-  border-top-color: #000;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: none;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
 /* ═══ SCREEN: SUCCESS ═══ */
 #screen-success {
   justify-content: center; align-items: center;
@@ -551,7 +535,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .success-msg strong { color: #fff; }
 .wa-btn {
   width: 100%; padding: 18px;
-  background: #25D366; color: #fff;
+  background: #25D366; color: #000;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 22px; font-weight: 900; letter-spacing: 0.06em;
   border: none; border-radius: var(--radius); cursor: pointer;
@@ -567,215 +551,14 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 }
 .outline-btn:hover { border-color: var(--gold); color: #fff; }
 
-/* ═══ SCREEN: ADMIN ═══ */
-.admin-topbar {
-  padding: 52px 24px 16px;
-  display: flex; align-items: flex-start; justify-content: space-between;
-}
-.admin-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 44px; font-weight: 900; letter-spacing: 0.02em; color: #fff; line-height: 1;
-}
-.admin-subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 500; }
-.admin-logout {
-  background: none; border: 1px solid rgba(255,255,255,0.12);
-  color: var(--muted); font-size: 13px; font-weight: 700;
-  padding: 8px 14px; border-radius: 9px; cursor: pointer;
-  font-family: 'Barlow', sans-serif; margin-top: 4px;
-  transition: all 0.2s;
-}
-.admin-logout:hover { border-color: var(--gold); color: #fff; }
-
-/* Admin PIN */
-.pin-wrap {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; padding: 40px 24px;
-}
-.pin-logo {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 58px; font-weight: 900; color: var(--gold); letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-.pin-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; text-align: center; font-weight: 500; }
-.pin-dots { display: flex; gap: 16px; margin-bottom: 36px; }
-.pin-dot {
-  width: 18px; height: 18px; border-radius: 50%;
-  border: 2px solid var(--muted2);
-  transition: all 0.15s;
-}
-.pin-dot.filled {
-  background: var(--gold); border-color: var(--gold);
-  box-shadow: 0 0 10px rgba(255,215,0,0.45);
-}
-.pin-pad {
-  display: grid; grid-template-columns: repeat(3, 76px);
-  gap: 12px; margin: 0 auto;
-}
-.pin-key {
-  width: 76px; height: 76px;
-  background: var(--card); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius); cursor: pointer;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 30px; font-weight: 700; color: #fff;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: all 0.12s; user-select: none; gap: 0;
-}
-.pin-key-sub { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; font-family: 'Barlow', sans-serif; font-weight: 700; }
-.pin-key:active { background: var(--gold-glow); border-color: var(--gold); transform: scale(0.94); }
-.pin-key.ghost { background: transparent; border-color: transparent; pointer-events: none; }
-.pin-key.del { font-size: 24px; }
-.pin-err { color: var(--red); font-size: 13px; margin-top: 20px; min-height: 20px; text-align: center; font-weight: 600; }
-
-/* Filter tabs */
-.filter-tabs {
-  display: flex; gap: 0; padding: 0 24px;
-  overflow-x: auto; scrollbar-width: none;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 16px;
-}
-.filter-tabs::-webkit-scrollbar { display: none; }
-.filter-tab {
-  padding: 12px 18px; font-size: 13px; font-weight: 800;
-  color: var(--muted); cursor: pointer; white-space: nowrap;
-  border-bottom: 2px solid transparent; transition: all 0.2s;
-  text-transform: uppercase; letter-spacing: 0.07em;
-}
-.filter-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.tab-n {
-  background: var(--dark3); border-radius: 6px;
-  padding: 2px 6px; font-size: 11px; margin-left: 5px;
-}
-
-/* Job cards */
-.jobs-list { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
-.job-card {
-  background: var(--card); border: 1px solid rgba(255,255,255,0.09);
-  border-radius: var(--radius); padding: 16px 18px;
-  cursor: pointer; transition: all 0.2s;
-  display: flex; align-items: center; gap: 14px;
-}
-.job-card:hover { border-color: var(--border-gold); }
-.job-card-left { flex: 1; min-width: 0; }
-.job-card-name {
-  font-size: 16px; font-weight: 700; margin-bottom: 3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff;
-}
-.job-card-meta { font-size: 13px; color: var(--muted); display: flex; gap: 8px; }
-.job-card-size {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px; font-weight: 900; color: var(--gold);
-  flex-shrink: 0; line-height: 1;
-}
-.job-card-right { text-align: right; flex-shrink: 0; }
-.status-pill {
-  display: inline-block;
-  font-size: 10px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  padding: 4px 9px; border-radius: 6px; margin-bottom: 4px;
-}
-.sp-pending  { background: rgba(255,215,0,0.15);  color: var(--gold); }
-.sp-sourcing { background: rgba(33,150,243,0.15); color: #64B5F6; }
-.sp-confirmed{ background: rgba(0,200,83,0.15);  color: #69F0AE; }
-.sp-complete { background: rgba(255,255,255,0.08); color: var(--muted); }
-.job-date { font-size: 11px; color: var(--muted2); }
-
-/* Job detail */
-.detail-topbar {
-  padding: 52px 24px 16px;
-  display: flex; align-items: center; gap: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.detail-back {
-  width: 40px; height: 40px; flex-shrink: 0;
-  background: var(--card); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px; display: flex; align-items: center; justify-content: center;
-  font-size: 20px; cursor: pointer; transition: all 0.2s;
-}
-.detail-back:hover { border-color: var(--gold); }
-.detail-ref {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 26px; font-weight: 900; color: var(--gold); letter-spacing: 0.04em;
-}
-
-.detail-section {
-  background: var(--card); border: 1px solid rgba(255,255,255,0.09);
-  border-radius: var(--radius); overflow: hidden;
-  margin: 12px 24px 0;
-}
-.ds-head {
-  padding: 12px 16px;
-  font-size: 11px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  background: rgba(0,0,0,0.2);
-}
-.ds-body { padding: 16px; }
-.ds-field { display: flex; gap: 10px; margin-bottom: 10px; }
-.ds-field:last-child { margin-bottom: 0; }
-.ds-key { font-size: 13px; color: var(--muted); min-width: 80px; flex-shrink: 0; font-weight: 500; }
-.ds-val { font-size: 14px; font-weight: 600; flex: 1; color: #fff; }
-.call-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(0,200,83,0.12); border: 1px solid rgba(0,200,83,0.3);
-  color: #69F0AE; padding: 8px 16px; border-radius: 9px;
-  font-size: 14px; font-weight: 700; text-decoration: none; margin-top: 2px;
-}
-.maps-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(33,150,243,0.12); border: 1px solid rgba(33,150,243,0.3);
-  color: #64B5F6; padding: 8px 16px; border-radius: 9px;
-  font-size: 14px; font-weight: 700; text-decoration: none; margin-top: 8px;
-}
-
-/* Photo row */
-.detail-photos { display: flex; gap: 12px; }
-.detail-photo {
-  flex: 1; aspect-ratio: 4/3;
-  object-fit: cover; border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
-  background: var(--dark3);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--muted); font-size: 13px; text-align: center;
-}
-.detail-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
-
-/* Status controls */
-.status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.status-btn {
-  padding: 14px 8px; border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,0.1); background: var(--dark3);
-  color: var(--muted); font-family: 'Barlow Semi Condensed', sans-serif;
-  font-size: 13px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s;
-}
-.status-btn:hover { border-color: var(--border-gold); color: #fff; }
-.status-btn.active-pending   { border-color: var(--gold);  background: rgba(255,215,0,0.1); color: var(--gold); }
-.status-btn.active-sourcing  { border-color: #64B5F6; background: rgba(33,150,243,0.1); color: #64B5F6; }
-.status-btn.active-confirmed { border-color: #69F0AE; background: rgba(0,200,83,0.1);   color: #69F0AE; }
-.status-btn.active-complete  { border-color: #555; background: rgba(255,255,255,0.05); color: var(--muted); }
-
-.admin-notes-ta {
-  width: 100%; background: var(--dark); border: 1px solid rgba(255,255,255,0.1);
-  color: #fff; font-family: 'Barlow', sans-serif; font-size: 14px;
-  padding: 12px; border-radius: 9px; resize: none; outline: none; min-height: 80px;
-  transition: border-color 0.2s;
-}
-.admin-notes-ta:focus { border-color: var(--border-gold); }
-.admin-notes-ta::placeholder { color: var(--muted2); }
-
-/* Empty state */
-.empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
-.empty-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.4; }
-.empty-text { font-size: 15px; }
-
 /* Toast */
 .toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-  padding: 14px 22px; border-radius: 100px;
+  padding: 14px 22px; border-radius: 20px;
   font-size: 14px; font-weight: 700;
   display: flex; align-items: center; gap: 8px;
   opacity: 0; pointer-events: none; z-index: 9999;
-  transition: opacity 0.3s; white-space: nowrap;
+  transition: opacity 0.3s; width: max-content; text-align: center;
   max-width: calc(100vw - 48px); backdrop-filter: blur(10px);
 }
 .toast.show { opacity: 1; }
@@ -783,70 +566,40 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
 .toast.error   { background: rgba(255,61,61,0.15); border: 1px solid rgba(255,61,61,0.35); color: #FF6E6E; }
 .toast.info    { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.35); color: var(--gold); }
 
-/* Loading overlay */
-.loading-overlay {
-  position: fixed; inset: 0; z-index: 10000;
-  background: rgba(8,8,8,0.92); backdrop-filter: blur(4px);
-  display: none; flex-direction: column;
-  align-items: center; justify-content: center; gap: 18px;
+/* Info card (photo + sending instructions) */
+.info-card {
+  background: rgba(255,215,0,0.05); border: 1px solid var(--border-gold);
+  border-radius: var(--radius); padding: 16px;
+  font-size: 14px; color: #fff; line-height: 1.5; text-align: left;
 }
-.loading-overlay.show { display: flex; }
-.loading-spinner {
-  width: 52px; height: 52px;
-  border: 3px solid var(--dark3);
-  border-top-color: var(--gold);
-  border-radius: 50%; animation: spin 0.8s linear infinite;
+.info-card-title {
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--gold); margin-bottom: 8px;
 }
-.loading-text { font-size: 15px; color: var(--muted); font-weight: 500; }
-
-/* Lightbox */
-.lightbox {
-  position: fixed; inset: 0; z-index: 10001;
-  background: rgba(0,0,0,0.97);
-  display: none; align-items: center; justify-content: center;
-  cursor: pointer;
+.info-card ol { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.info-card strong { color: #fff; font-weight: 700; }
+.info-card .muted { color: var(--muted); }
+.review-info { margin: 0 24px 4px; }
+.save-links { display: flex; gap: 8px; margin-top: 10px; }
+.save-links a {
+  flex: 1; text-align: center; text-decoration: none;
+  border: 1px solid var(--border-gold); color: var(--gold);
+  border-radius: var(--radius-sm); padding: 10px 6px;
+  font-size: 13px; font-weight: 800;
 }
-.lightbox.show { display: flex; }
-.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-/* Config banner */
-.config-banner {
-  background: rgba(255,61,61,0.1); border-bottom: 1px solid rgba(255,61,61,0.25);
-  padding: 12px 16px; font-size: 13px; color: #FF6E6E;
-  display: none; align-items: center; gap: 8px; text-align: center;
-  justify-content: center; font-weight: 500;
-}
-.config-banner.show { display: flex; }
-
-/* Upload tip banner */
-.upload-tip {
-  background: rgba(255,215,0,0.07);
-  border: 1px solid rgba(255,215,0,0.25);
-  border-radius: 10px; padding: 14px 16px;
-  font-size: 13px; color: #E8D78A; font-weight: 500;
-  margin-bottom: 4px;
-}
+.success-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.success-actions .outline-btn { margin-bottom: 0; }
 </style>
 </head>
 <body>
 
-<div class="config-banner" id="configBanner">
-  ⚠️ Add your Supabase keys to activate. <strong style="margin-left:4px">See setup guide below.</strong>
-</div>
-
+<!-- TYRE TREAD BACKGROUND -->
 <div class="tread-bg"></div>
 
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-text" id="loadingText">Submitting your request...</div>
-</div>
-
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img id="lightboxImg" src="" alt="">
-</div>
-
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- APP -->
 <div class="app">
 
   <!-- ═══ SCREEN: HOME ═══ -->
@@ -858,6 +611,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
             <div class="brand-icon">🏎</div>
             <div class="brand-name">TYRES<span>NOW!</span></div>
           </div>
+          <p class="brand-byline">By <strong>Elvis City Tyres</strong><br>No. 5 8th Street, Newlands, Randburg, 2092</p>
           <div class="live-badge"><span class="live-dot"></span> Open for bookings</div>
           <div class="hero-headline">
             ON-SITE
@@ -870,7 +624,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
           </p>
           <div class="hero-stats">
             <div class="stat-item">
-              <div class="stat-val">R3</div>
+              <div class="stat-val">Free</div>
               <div class="stat-lbl">To request</div>
             </div>
             <div class="stat-item">
@@ -888,7 +642,7 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
             <span>GET MY TYRE FITTED</span>
             <span class="cta-arrow">→</span>
           </button>
-          <a class="hero-phone" href="tel:+27110000000">📞 Call us: 011 000 0000</a>
+          <a class="hero-phone" href="tel:+27631797137">📞 Call us: 063 179 7137</a>
         </div>
       </div>
       <div class="how-strip">
@@ -896,11 +650,11 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
         <div class="how-steps">
           <div class="how-step">
             <div class="how-num">1</div>
-            <div class="how-text"><strong>Fill in your request</strong><span>Tell us your tyre size, location &amp; upload 2 photos</span></div>
+            <div class="how-text"><strong>Fill in your request</strong><span>Your tyre size, location &amp; 2 photos</span></div>
           </div>
           <div class="how-step">
             <div class="how-num">2</div>
-            <div class="how-text"><strong>We call you back</strong><span>Within 2 hours to confirm &amp; quote</span></div>
+            <div class="how-text"><strong>Send it on WhatsApp</strong><span>We call you back within 2 hours to confirm &amp; quote</span></div>
           </div>
           <div class="how-step">
             <div class="how-num">3</div>
@@ -1028,19 +782,26 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
           <div class="pstep done"></div><div class="pstep"></div><div class="pstep"></div>
         </div>
         <div class="form-body">
-          <div class="upload-tip">
-            📸 Tap each card to take a photo or pick from gallery. Both required.
+          <div class="info-card">
+            <div class="info-card-title">📸 Take your photos first</div>
+            <ol>
+              <li>Use your <strong>phone's camera</strong> to take a clear photo of the <strong>tyre sidewall</strong> (the numbers) and one of the <strong>rim</strong>.</li>
+              <li>Tap each card below and <strong>choose the photo from your gallery</strong>.</li>
+            </ol>
+            <p class="muted" style="margin-top:8px">Keep these photos in your gallery. You'll send them to us on WhatsApp at the end.</p>
           </div>
           <div class="photo-upload-grid">
+            <!-- Tyre sidewall photo -->
             <div class="photo-slot" id="slot-tyre" onclick="triggerUpload('tyre')">
-              <input type="file" id="upload-tyre" accept="image/*" capture="environment" onchange="handlePhoto(event,'tyre')" style="display:none">
+              <input type="file" id="upload-tyre" accept="image/*" onchange="handlePhoto(event,'tyre')" style="display:none">
               <div class="slot-icon">🔤</div>
               <div class="slot-label">Tyre<br>Sidewall</div>
               <img class="slot-preview" id="preview-tyre" style="display:none">
               <div class="slot-retake" id="retake-tyre" style="display:none">↺ Retake</div>
             </div>
+            <!-- Rim photo -->
             <div class="photo-slot" id="slot-rim" onclick="triggerUpload('rim')">
-              <input type="file" id="upload-rim" accept="image/*" capture="environment" onchange="handlePhoto(event,'rim')" style="display:none">
+              <input type="file" id="upload-rim" accept="image/*" onchange="handlePhoto(event,'rim')" style="display:none">
               <div class="slot-icon">⭕</div>
               <div class="slot-label">Rim<br>Condition</div>
               <img class="slot-preview" id="preview-rim" style="display:none">
@@ -1130,12 +891,17 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
           <div class="pstep done"></div><div class="pstep done"></div><div class="pstep done"></div>
         </div>
         <div id="review-content"></div>
-        <div class="form-nav" style="padding-top:8px">
+        <div class="info-card review-info">
+          <div class="info-card-title">💬 How sending works</div>
+          <ol>
+            <li>Tap <strong>Send on WhatsApp</strong> below. WhatsApp opens a chat with Tyres Now (<span class="wa-display"></span>) with your details already typed in.</li>
+            <li>Tap <strong>Send</strong> in WhatsApp.</li>
+            <li><strong>Come back to this page</strong> to send your 2 photos.</li>
+          </ol>
+        </div>
+        <div class="form-nav" style="padding-top:16px">
           <button class="btn-back" onclick="nextStep(4)">←</button>
-          <button class="btn-primary" id="submitBtn" onclick="submitRequest()">
-            <div class="btn-spinner" id="submitSpinner"></div>
-            <span id="submitLabel">SUBMIT REQUEST</span>
-          </button>
+          <button class="btn-primary" onclick="sendDetails()">Send on WhatsApp</button>
         </div>
       </div>
 
@@ -1145,86 +911,42 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
   <!-- ═══ SCREEN: SUCCESS ═══ -->
   <div class="screen" id="screen-success" style="justify-content:center;align-items:center;padding:40px 24px">
     <div class="scroll-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px">
-      <div class="success-ring">✅</div>
+      <div class="success-ring" id="success-icon">📷</div>
       <div class="success-ref" id="success-ref">TN-0001</div>
-      <div class="success-title">REQUEST<br>SENT!</div>
-      <p class="success-msg">
-        We've received your request and will<br>
-        <strong>call you within 2 hours</strong> to confirm<br>
-        availability and quote.
+      <div class="success-title" id="success-title">NOW SEND<br>YOUR PHOTOS</div>
+      <p class="success-msg" id="success-msg">
+        Sent your details in WhatsApp? Great.<br>
+        <strong>Last step:</strong> send us your tyre and rim photos.
       </p>
-      <button class="wa-btn" onclick="openWhatsApp()">
-        💬 Open WhatsApp
+
+      <button class="wa-btn" id="sharePhotosBtn" onclick="sharePhotos()" style="display:none">
+        📷 Send my 2 photos
       </button>
-      <button class="outline-btn" onclick="goTo('screen-home');resetForm()">← Back to home</button>
-    </div>
-  </div>
 
-  <!-- ═══ SCREEN: ADMIN ═══ -->
-  <div class="screen" id="screen-admin">
-    <div class="scroll-content">
-
-      <div id="admin-pin-view">
-        <div class="pin-wrap">
-          <div class="pin-logo">TYRES NOW!</div>
-          <div class="pin-sub">Admin Panel — Enter PIN to continue</div>
-          <div class="pin-dots" id="pinDots">
-            <div class="pin-dot" id="pd0"></div>
-            <div class="pin-dot" id="pd1"></div>
-            <div class="pin-dot" id="pd2"></div>
-            <div class="pin-dot" id="pd3"></div>
+      <div class="info-card" style="width:100%">
+        <div class="info-card-title" id="manual-title">Or attach them yourself</div>
+        <ol>
+          <li>Open your WhatsApp chat with <strong>Tyres Now (<span class="wa-display"></span>)</strong>.</li>
+          <li>Tap <strong>📎</strong> (Android) or <strong>+</strong> (iPhone).</li>
+          <li>Choose <strong>Gallery</strong> or <strong>Photos</strong>.</li>
+          <li>Pick your <strong>tyre sidewall</strong> and <strong>rim</strong> photos, then tap <strong>Send</strong>.</li>
+        </ol>
+        <div id="save-photos" style="display:none">
+          <p class="muted" style="margin-top:10px">Photos not in your gallery? Save them to your phone first:</p>
+          <div class="save-links">
+            <a id="save-tyre" download>Save tyre photo</a>
+            <a id="save-rim" download>Save rim photo</a>
           </div>
-          <div class="pin-pad">
-            <div class="pin-key" onclick="pinKey(1)">1<div class="pin-key-sub"></div></div>
-            <div class="pin-key" onclick="pinKey(2)">2<div class="pin-key-sub">ABC</div></div>
-            <div class="pin-key" onclick="pinKey(3)">3<div class="pin-key-sub">DEF</div></div>
-            <div class="pin-key" onclick="pinKey(4)">4<div class="pin-key-sub">GHI</div></div>
-            <div class="pin-key" onclick="pinKey(5)">5<div class="pin-key-sub">JKL</div></div>
-            <div class="pin-key" onclick="pinKey(6)">6<div class="pin-key-sub">MNO</div></div>
-            <div class="pin-key" onclick="pinKey(7)">7<div class="pin-key-sub">PQRS</div></div>
-            <div class="pin-key" onclick="pinKey(8)">8<div class="pin-key-sub">TUV</div></div>
-            <div class="pin-key" onclick="pinKey(9)">9<div class="pin-key-sub">WXYZ</div></div>
-            <div class="pin-key ghost"></div>
-            <div class="pin-key" onclick="pinKey(0)">0</div>
-            <div class="pin-key del" onclick="pinDel()">⌫</div>
-          </div>
-          <div class="pin-err" id="pinErr"></div>
-          <button class="outline-btn" onclick="goTo('screen-home')" style="max-width:240px;margin-top:24px">← Back</button>
         </div>
       </div>
 
-      <div id="admin-dash-view" style="display:none">
-        <div class="admin-topbar">
-          <div>
-            <div class="admin-title">JOB INBOX</div>
-            <div class="admin-subtitle">Tyres Now! — Admin</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
-            <button class="admin-logout" onclick="adminLogout()">Logout</button>
-            <button class="admin-logout" onclick="loadJobs(currentFilter)" style="color:var(--gold);border-color:rgba(255,215,0,0.35)">↺ Refresh</button>
-          </div>
-        </div>
-        <div class="filter-tabs" id="filterTabs">
-          <div class="filter-tab active" onclick="filterJobs('all',this)">All <span class="tab-n" id="cnt-all">0</span></div>
-          <div class="filter-tab" onclick="filterJobs('pending',this)">Pending <span class="tab-n" id="cnt-pending">0</span></div>
-          <div class="filter-tab" onclick="filterJobs('sourcing',this)">Sourcing <span class="tab-n" id="cnt-sourcing">0</span></div>
-          <div class="filter-tab" onclick="filterJobs('confirmed',this)">Confirmed <span class="tab-n" id="cnt-confirmed">0</span></div>
-          <div class="filter-tab" onclick="filterJobs('complete',this)">Done <span class="tab-n" id="cnt-complete">0</span></div>
-        </div>
-        <div class="jobs-list" id="jobsList"></div>
+      <div class="success-actions">
+        <button class="outline-btn" onclick="openChat()">💬 WhatsApp didn't open? Tap here</button>
+        <button class="outline-btn" onclick="finishRequest()">I've sent everything, back to home</button>
       </div>
-
-      <div id="admin-detail-view" style="display:none">
-        <div class="detail-topbar">
-          <div class="detail-back" onclick="showAdminView('dash')">←</div>
-          <div>
-            <div class="detail-ref" id="dRef"></div>
-          </div>
-          <div id="dBadge" class="status-pill sp-pending" style="margin-left:auto">Pending</div>
-        </div>
-        <div id="detailContent" style="padding-bottom:32px"></div>
-      </div>
-
+      <p class="success-msg" style="margin:20px auto 0">
+        We'll <strong>call you within 2 hours</strong> to confirm availability and quote.
+      </p>
     </div>
   </div>
 
@@ -1238,54 +960,24 @@ textarea.field-input { resize: none; min-height: 80px; line-height: 1.6; }
       <span class="nav-icon">📋</span>
       <span class="nav-label">Request</span>
     </div>
-    <div class="nav-item" id="nav-admin" onclick="navTo('admin')">
-      <span class="nav-icon">⚙️</span>
-      <span class="nav-label">Admin</span>
-      <div class="nav-badge" id="pendingBadge" style="display:none">!</div>
-    </div>
   </nav>
 </div>
 
 <script>
 const CONFIG = {
-  supabaseUrl:  'https://qxbsvegcmsjxafgcsdtv.supabase.co',
-  supabaseKey:  'sb_publishable_YPP1LeKWaNOgrGjJS56Zuw_n5AYi1rT',
-  ownerPhone:   '27822279048',
-  callMeBotKey: '9719691',
-  adminPin:     '1128',
+  whatsappNumber:  '27631797137',   // international format, no + or spaces
+  whatsappDisplay: '063 179 7137',  // shown to customers
 };
-
-let db = null;
-let isConfigured = false;
-
-function initSupabase() {
-  if (CONFIG.supabaseUrl.startsWith('YOUR') || CONFIG.supabaseKey.startsWith('YOUR')) {
-    document.getElementById('configBanner').classList.add('show');
-    isConfigured = false;
-    return;
-  }
-  try {
-    const { createClient } = supabase;
-    db = createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-    isConfigured = true;
-  } catch(e) {
-    console.error('Supabase init failed:', e);
-    isConfigured = false;
-  }
-}
 
 let state = {
   step: 1,
   sizeUnknown: false,
   selectedTime: 'morning',
-  photoTyre: null,
-  photoRim: null,
-  adminLoggedIn: false,
-  allJobs: [],
-  currentJob: null,
+  photos: { tyre: null, rim: null },  // { file, url }
+  ref: null,
 };
-let currentFilter = 'all';
-let pinBuffer = '';
+
+const TIME_LABELS = { morning:'Morning (8am–12pm)', afternoon:'Afternoon (12pm–5pm)', flexible:'Flexible' };
 
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1298,7 +990,6 @@ function navTo(tab) {
   document.getElementById('nav-' + tab).classList.add('active');
   if (tab === 'home') goTo('screen-home');
   else if (tab === 'request') { goTo('screen-request'); showStep(state.step); }
-  else if (tab === 'admin') goTo('screen-admin');
 }
 
 function showStep(n) {
@@ -1318,35 +1009,51 @@ function validateAndNextStep(currentStep) {
     const r = document.getElementById('f-rim').value;
     const fs = document.getElementById('f-freesize').value.trim();
     const err = document.getElementById('size-error');
-    if (!state.sizeUnknown && (!w || !a || !r)) { err.style.display = 'block'; return; }
-    if (state.sizeUnknown && !fs) { err.textContent = 'Please type what you see on the sidewall.'; err.style.display = 'block'; return; }
+    if (!state.sizeUnknown && (!w || !a || !r)) {
+      err.style.display = 'block';
+      return;
+    }
+    if (state.sizeUnknown && !fs) {
+      err.textContent = 'Please type what you see on the sidewall.';
+      err.style.display = 'block';
+      return;
+    }
     err.style.display = 'none';
     showStep(3);
   } else if (currentStep === 3) {
     const err = document.getElementById('photo-error');
-    if (!state.photoTyre || !state.photoRim) { err.style.display = 'block'; return; }
+    if (!state.photos.tyre || !state.photos.rim) {
+      err.style.display = 'block';
+      return;
+    }
     err.style.display = 'none';
     showStep(4);
   } else if (currentStep === 4) {
     const name = v('f-name'), phone = v('f-phone'), street = v('f-street'), suburb = v('f-suburb');
     let ok = true;
-    show('err-name', !name); if (!name) ok = false;
+    show('err-name', !name);
+    if (!name) ok = false;
     const phoneOk = /^0[6-8][0-9]{8}$/.test(phone.replace(/\s/g,''));
-    show('err-phone', !phoneOk); if (!phoneOk) ok = false;
-    show('err-street', !street); if (!street) ok = false;
-    show('err-suburb', !suburb); if (!suburb) ok = false;
+    show('err-phone', !phoneOk);
+    if (!phoneOk) ok = false;
+    show('err-street', !street);
+    if (!street) ok = false;
+    show('err-suburb', !suburb);
+    if (!suburb) ok = false;
     if (ok) showStep(5);
   }
 }
 
 function v(id) { return document.getElementById(id).value.trim(); }
 function show(id, visible) { document.getElementById(id).style.display = visible ? 'block' : 'none'; }
+function esc(str) { return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function updateSize() {
   const w = document.getElementById('f-width').value;
   const a = document.getElementById('f-aspect').value;
   const r = document.getElementById('f-rim').value;
-  document.getElementById('sizeDisplay').textContent = `${w||'—'}/${a||'—'} R${r||'—'}`;
+  document.getElementById('sizeDisplay').textContent =
+    `${w||'—'}/${a||'—'} R${r||'—'}`;
 }
 
 function toggleSizeUnknown() {
@@ -1359,43 +1066,37 @@ function toggleSizeUnknown() {
   freetext.style.display = state.sizeUnknown ? 'block' : 'none';
 }
 
-function triggerUpload(type) { document.getElementById('upload-' + type).click(); }
-
-function handlePhoto(event, type) {
-  const file = event.target.files[0];
-  if (!file) return;
-  compressAndStore(file, type);
+function tyreSizeLabel() {
+  const w = v('f-width'), a = v('f-aspect'), r = v('f-rim');
+  if (state.sizeUnknown) return v('f-freesize') || 'Unknown, see sidewall photo';
+  return w && a && r ? `${w}/${a} R${r}` : 'See sidewall photo';
 }
 
-function compressAndStore(file, type) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const MAX = 800;
-      let w = img.width, h = img.height;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-        else { w = Math.round(w * MAX / h); h = MAX; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const b64 = canvas.toDataURL('image/jpeg', 0.75);
-      if (type === 'tyre') state.photoTyre = b64;
-      else state.photoRim = b64;
-      const preview = document.getElementById('preview-' + type);
-      const retake = document.getElementById('retake-' + type);
-      const slot = document.getElementById('slot-' + type);
-      preview.src = b64; preview.style.display = 'block';
-      retake.style.display = 'block';
-      slot.classList.add('filled');
-      slot.querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = 'none');
-      document.getElementById('photo-error').style.display = 'none';
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+function vehicleLabel() {
+  return [v('f-make'), v('f-model'), v('f-year')].filter(Boolean).join(' ') || 'Not specified';
+}
+
+function triggerUpload(type) {
+  document.getElementById('upload-' + type).click();
+}
+
+function handlePhoto(event, type) {
+  const original = event.target.files[0];
+  if (!original) return;
+  // Rename so the owner can tell the two photos apart in WhatsApp
+  const ext = (original.name.match(/\.[a-z0-9]+$/i) || ['.jpg'])[0];
+  const file = new File([original], (type === 'tyre' ? 'tyre-sidewall' : 'rim') + ext,
+                        { type: original.type || 'image/jpeg' });
+  if (state.photos[type]) URL.revokeObjectURL(state.photos[type].url);
+  state.photos[type] = { file, url: URL.createObjectURL(file) };
+
+  const preview = document.getElementById('preview-' + type);
+  const slot = document.getElementById('slot-' + type);
+  preview.src = state.photos[type].url; preview.style.display = 'block';
+  document.getElementById('retake-' + type).style.display = 'block';
+  slot.classList.add('filled');
+  slot.querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = 'none');
+  document.getElementById('photo-error').style.display = 'none';
 }
 
 function selTime(t) {
@@ -1406,361 +1107,145 @@ function selTime(t) {
 }
 
 function buildReview() {
-  const w = v('f-width'), a = v('f-aspect'), r = v('f-rim');
-  const freesize = v('f-freesize');
-  const sizeStr = state.sizeUnknown
-    ? (freesize || 'Unknown — see photo')
-    : (w && a && r ? `${w}/${a} R${r}` : 'See sidewall photo');
-  const timeLabels = { morning:'Morning (8am–12pm)', afternoon:'Afternoon (12pm–5pm)', flexible:'Flexible' };
-
+  const p = state.photos;
   document.getElementById('review-content').innerHTML = `
     <div class="review-section">
       <div class="review-head"><span class="review-head-label">🚗 Vehicle</span><span class="review-edit" onclick="nextStep(1)">Edit</span></div>
       <div class="review-body">
-        <div class="review-row"><span class="review-key">Vehicle</span><span class="review-val">${[v('f-make'),v('f-model'),v('f-year')].filter(Boolean).join(' ') || '—'}</span></div>
-        <div class="review-row"><span class="review-key">Tyre size</span><span class="review-val ${state.sizeUnknown ? '' : 'review-size-val'}">${sizeStr}</span></div>
+        <div class="review-row"><span class="review-key">Vehicle</span><span class="review-val">${esc(vehicleLabel())}</span></div>
+        <div class="review-row"><span class="review-key">Tyre size</span><span class="review-val ${state.sizeUnknown ? '' : 'review-size-val'}">${esc(tyreSizeLabel())}</span></div>
       </div>
     </div>
     <div class="review-section">
       <div class="review-head"><span class="review-head-label">📸 Photos</span><span class="review-edit" onclick="nextStep(3)">Edit</span></div>
       <div class="review-body">
         <div class="review-photos">
-          ${state.photoTyre ? `<img class="review-photo-thumb" src="${state.photoTyre}">` : '<div class="review-photo-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">🔤</div>'}
-          ${state.photoRim ? `<img class="review-photo-thumb" src="${state.photoRim}">` : '<div class="review-photo-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px">⭕</div>'}
+          ${p.tyre ? `<img class="review-photo-thumb" src="${p.tyre.url}" alt="Tyre sidewall">` : ''}
+          ${p.rim ? `<img class="review-photo-thumb" src="${p.rim.url}" alt="Rim">` : ''}
         </div>
       </div>
     </div>
     <div class="review-section">
       <div class="review-head"><span class="review-head-label">📍 Location & Contact</span><span class="review-edit" onclick="nextStep(4)">Edit</span></div>
       <div class="review-body">
-        <div class="review-row"><span class="review-key">Name</span><span class="review-val">${v('f-name')}</span></div>
-        <div class="review-row"><span class="review-key">Phone</span><span class="review-val">${v('f-phone')}</span></div>
-        <div class="review-row"><span class="review-key">Address</span><span class="review-val">${v('f-street')}, ${v('f-suburb')}, Johannesburg</span></div>
-        <div class="review-row"><span class="review-key">Time</span><span class="review-val">${timeLabels[state.selectedTime]}</span></div>
-        ${v('f-notes') ? `<div class="review-row"><span class="review-key">Notes</span><span class="review-val">${v('f-notes')}</span></div>` : ''}
+        <div class="review-row"><span class="review-key">Name</span><span class="review-val">${esc(v('f-name'))}</span></div>
+        <div class="review-row"><span class="review-key">Phone</span><span class="review-val">${esc(v('f-phone'))}</span></div>
+        <div class="review-row"><span class="review-key">Address</span><span class="review-val">${esc(v('f-street'))}, ${esc(v('f-suburb'))}, Johannesburg</span></div>
+        <div class="review-row"><span class="review-key">Time</span><span class="review-val">${TIME_LABELS[state.selectedTime]}</span></div>
+        ${v('f-notes') ? `<div class="review-row"><span class="review-key">Notes</span><span class="review-val">${esc(v('f-notes'))}</span></div>` : ''}
       </div>
     </div>
   `;
 }
 
-async function submitRequest() {
-  const btn = document.getElementById('submitBtn');
-  const spinner = document.getElementById('submitSpinner');
-  const label = document.getElementById('submitLabel');
-  btn.disabled = true; spinner.style.display = 'block'; label.textContent = 'SENDING...';
-  showLoading('Saving your request...');
+// Sending: 1) details as pre-typed text to our number (wa.me / whatsapp://),
+// which also creates the chat so it tops the customer's share list;
+// 2) photos via the phone's share sheet, or attached from the gallery.
+// A wa.me link can only carry text.
+function buildMessage() {
+  return [
+    `🚗 New tyre request ${state.ref}`,
+    `Name: ${v('f-name')}`,
+    `Phone: ${v('f-phone')}`,
+    `Vehicle: ${vehicleLabel()}`,
+    `Tyre size: ${tyreSizeLabel()}`,
+    `Address: ${v('f-street')}, ${v('f-suburb')}`,
+    `Time: ${TIME_LABELS[state.selectedTime]}`,
+    `Notes: ${v('f-notes') || 'None'}`,
+    ``,
+    `📷 Sending my tyre & rim photos next.`,
+  ].join('\n');
+}
 
-  const w = v('f-width'), a = v('f-aspect'), r = v('f-rim');
-  const freesize = v('f-freesize');
-  const tyreSize = state.sizeUnknown ? (freesize || 'Unknown') : (w && a && r ? `${w}/${a} R${r}` : 'Unknown');
-  const ref = 'TN-' + Date.now().toString().slice(-6);
-  const vehicle = [v('f-make'), v('f-model'), v('f-year')].filter(Boolean).join(' ') || 'Not specified';
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  const jobData = {
-    reference: ref, customer_name: v('f-name'), customer_phone: v('f-phone'),
-    vehicle: vehicle, tyre_size: tyreSize, tyre_size_unknown: state.sizeUnknown,
-    address: v('f-street'), suburb: v('f-suburb'), preferred_time: state.selectedTime,
-    notes: v('f-notes'), photo_tyre: state.photoTyre || null, photo_rim: state.photoRim || null,
-    status: 'pending',
-  };
+function sendDetails() {
+  state.ref = state.ref || 'TN-' + Date.now().toString().slice(-6);
+  const text = encodeURIComponent(buildMessage());
+  // whatsapp:// opens the app without leaving this page, so the photos stay loaded
+  if (isMobile) location.href = `whatsapp://send?phone=${CONFIG.whatsappNumber}&text=${text}`;
+  else window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${text}`, '_blank');
+  showPhotoStep();
+}
 
+// Fallback for when the app link did nothing (e.g. WhatsApp not installed)
+function openChat() {
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(buildMessage())}`, '_blank');
+}
+
+function photoFiles() { return [state.photos.tyre.file, state.photos.rim.file]; }
+
+function canSharePhotos() {
+  try { return !!(navigator.canShare && navigator.canShare({ files: photoFiles() })); }
+  catch { return false; }
+}
+
+function showPhotoStep() {
+  const shareable = canSharePhotos();
+  document.getElementById('success-ref').textContent = state.ref;
+  document.getElementById('success-icon').textContent = '📷';
+  document.getElementById('success-title').innerHTML = 'NOW SEND<br>YOUR PHOTOS';
+  document.getElementById('sharePhotosBtn').style.display = shareable ? 'flex' : 'none';
+  document.getElementById('manual-title').textContent = shareable ? 'Or attach them yourself' : 'Attach your photos in WhatsApp';
+  // Without a share sheet the customer needs the photos in their gallery
+  document.getElementById('save-photos').style.display = shareable ? 'none' : 'block';
+  ['tyre','rim'].forEach(t => {
+    const a = document.getElementById('save-' + t);
+    a.href = state.photos[t].url;
+    a.download = state.photos[t].file.name;
+  });
+  goTo('screen-success');
+}
+
+async function sharePhotos() {
   try {
-    if (!isConfigured) {
-      await new Promise(r => setTimeout(r, 1800));
-      hideLoading();
-      document.getElementById('success-ref').textContent = ref;
-      state.lastJob = jobData;
-      resetForm();
-      goTo('screen-success');
-      showToast('✓ Request submitted (demo mode)', 'info');
-      return;
-    }
-    showLoading('Saving to database...');
-    const { data, error } = await db.from('jobs').insert([jobData]).select();
-    if (error) throw error;
-    showLoading('Notifying owner via WhatsApp...');
-    const ownerMsg = encodeURIComponent(
-      `🚨 New Tyre Request!\nRef: ${ref}\nCustomer: ${v('f-name')} | ${v('f-phone')}\n` +
-      `Tyre: ${tyreSize}\nVehicle: ${vehicle}\nLocation: ${v('f-street')}, ${v('f-suburb')}\n` +
-      `Time pref: ${state.selectedTime}\nNotes: ${v('f-notes') || 'None'}`
-    );
-    if (!CONFIG.callMeBotKey.startsWith('YOUR')) {
-      await fetch(`https://api.callmebot.com/whatsapp.php?phone=${CONFIG.ownerPhone}&text=${ownerMsg}&apikey=${CONFIG.callMeBotKey}`).catch(() => {});
-    }
-    state.customerPhone = v('f-phone').replace(/\s/g,'').replace(/^0/,'27');
-    state.customerRef = ref;
-    hideLoading();
-    document.getElementById('success-ref').textContent = ref;
-    state.lastJob = jobData;
-    resetForm();
-    navTo('home');
-    goTo('screen-success');
-    showToast('✓ Request submitted successfully!', 'success');
-  } catch(err) {
-    hideLoading();
-    console.error(err);
-    showToast('Failed to submit. Check your connection and try again.', 'error');
-    btn.disabled = false; spinner.style.display = 'none'; label.textContent = 'RETRY';
+    await navigator.share({ files: photoFiles(), text: `Photos for tyre request ${state.ref}` });
+    document.getElementById('success-icon').textContent = '✅';
+    document.getElementById('success-title').innerHTML = 'ALL<br>SENT!';
+    showToast('✓ Photos shared. Make sure you picked Tyres Now.', 'success');
+  } catch (err) {
+    if (err.name === 'AbortError') showToast('Photos not sent yet. Tap the button again.', 'info');
+    else showToast('Could not open sharing. Attach the photos from your gallery instead.', 'error');
   }
 }
 
-function openWhatsApp() {
-  const phone = state.customerPhone || '27800000000';
-  const ref = state.customerRef || 'TN-XXXXX';
-  const msg = encodeURIComponent(
-    `Hi! 👋 Your Tyres Now! request ${ref} has been received.\n\n` +
-    `We'll call you within 2 hours to confirm availability and provide a quote.\n\nThank you for choosing Tyres Now! 🔧`
-  );
-  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+function finishRequest() {
+  resetForm();
+  navTo('home');
 }
 
 function resetForm() {
-  ['f-make','f-model','f-name','f-phone','f-street','f-suburb','f-notes','f-freesize'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-year').value = '';
-  document.getElementById('f-width').value = '';
-  document.getElementById('f-aspect').value = '';
-  document.getElementById('f-rim').value = '';
+  ['f-make','f-model','f-year','f-width','f-aspect','f-rim','f-freesize',
+   'f-name','f-phone','f-street','f-suburb','f-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('sizeDisplay').textContent = '— / — R—';
-  state.photoTyre = null; state.photoRim = null;
-  state.sizeUnknown = false; state.selectedTime = 'morning';
   ['tyre','rim'].forEach(t => {
+    if (state.photos[t]) URL.revokeObjectURL(state.photos[t].url);
+    state.photos[t] = null;
     document.getElementById('preview-' + t).style.display = 'none';
     document.getElementById('retake-' + t).style.display = 'none';
     document.getElementById('slot-' + t).classList.remove('filled');
     document.getElementById('slot-' + t).querySelectorAll('.slot-icon,.slot-label').forEach(el => el.style.display = '');
     document.getElementById('upload-' + t).value = '';
   });
+  state.ref = null;
+  state.sizeUnknown = false;
   document.getElementById('sizeToggle').classList.remove('on');
   document.getElementById('size-picker-card').style.display = 'block';
   document.getElementById('freetext-size').style.display = 'none';
   selTime('morning');
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = false;
-  document.getElementById('submitSpinner').style.display = 'none';
-  document.getElementById('submitLabel').textContent = 'SUBMIT REQUEST';
   showStep(1);
 }
-
-function showLoading(msg) { document.getElementById('loadingText').textContent = msg || 'Loading...'; document.getElementById('loadingOverlay').classList.add('show'); }
-function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
 
 let toastTimer;
 function showToast(msg, type = 'info') {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast ${type} show`;
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-function pinKey(n) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += n; updatePinDots();
-  if (pinBuffer.length === 4) {
-    setTimeout(() => {
-      if (pinBuffer === CONFIG.adminPin) {
-        pinBuffer = ''; updatePinDots();
-        document.getElementById('pinErr').textContent = '';
-        state.adminLoggedIn = true;
-        showAdminView('dash'); loadJobs('all');
-      } else {
-        document.getElementById('pinErr').textContent = '✕ Incorrect PIN. Try again.';
-        pinBuffer = ''; setTimeout(updatePinDots, 300);
-      }
-    }, 150);
-  }
-}
-function pinDel() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); }
-function updatePinDots() {
-  for (let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled', i < pinBuffer.length);
-}
-function adminLogout() { state.adminLoggedIn = false; pinBuffer = ''; updatePinDots(); showAdminView('pin'); }
-function showAdminView(view) {
-  document.getElementById('admin-pin-view').style.display = view==='pin'?'block':'none';
-  document.getElementById('admin-dash-view').style.display = view==='dash'?'block':'none';
-  document.getElementById('admin-detail-view').style.display = view==='detail'?'block':'none';
-}
-
-async function loadJobs(filter) {
-  currentFilter = filter;
-  if (!isConfigured) {
-    state.allJobs = [
-      { id:'demo1', reference:'TN-001', customer_name:'Sipho Dlamini', customer_phone:'083 456 7890', vehicle:'Toyota Corolla 2022', tyre_size:'205/55 R16', suburb:'Linden', preferred_time:'morning', address:'14 Linden Ave', notes:'Gate code 1234', status:'pending', created_at: new Date().toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'' },
-      { id:'demo2', reference:'TN-002', customer_name:'Thabo Mokoena', customer_phone:'072 111 2233', vehicle:'VW Polo 2020', tyre_size:'185/65 R15', suburb:'Sandton', preferred_time:'afternoon', address:'7 Maude St', notes:'', status:'sourcing', created_at: new Date(Date.now()-86400000).toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'' },
-      { id:'demo3', reference:'TN-003', customer_name:'Lindiwe Khumalo', customer_phone:'061 999 8877', vehicle:'BMW 3 Series 2019', tyre_size:'225/45 R17', suburb:'Bryanston', preferred_time:'flexible', address:'22 William Nicol', notes:'Flat tyre in basement', status:'confirmed', created_at: new Date(Date.now()-172800000).toISOString(), photo_tyre:null, photo_rim:null, admin_notes:'Sourced Goodyear R1200' },
-    ];
-    renderJobs(filter); updateTabCounts(); return;
-  }
-  try {
-    const { data, error } = await db.from('jobs').select('*').order('created_at', { ascending: false });
-    if (error) throw error;
-    state.allJobs = data || [];
-    renderJobs(filter); updateTabCounts();
-    const pendingCount = state.allJobs.filter(j => j.status === 'pending').length;
-    const badge = document.getElementById('pendingBadge');
-    badge.style.display = pendingCount > 0 ? 'flex' : 'none';
-    badge.textContent = pendingCount;
-  } catch(e) { showToast('Could not load jobs: ' + e.message, 'error'); }
-}
-
-function updateTabCounts() {
-  const all = state.allJobs;
-  document.getElementById('cnt-all').textContent = all.length;
-  ['pending','sourcing','confirmed','complete'].forEach(s =>
-    document.getElementById('cnt-'+s).textContent = all.filter(j=>j.status===s).length
-  );
-}
-
-function renderJobs(filter) {
-  const jobs = filter === 'all' ? state.allJobs : state.allJobs.filter(j => j.status === filter);
-  const list = document.getElementById('jobsList');
-  if (!jobs.length) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No ${filter === 'all' ? '' : filter+' '}jobs yet</div></div>`;
-    return;
-  }
-  list.innerHTML = jobs.map(j => `
-    <div class="job-card" onclick="openJob('${j.id}')">
-      <div class="job-card-left">
-        <div class="job-card-name">${j.customer_name}</div>
-        <div class="job-card-meta"><span>${j.suburb || '—'}</span><span>·</span><span>${fmtDate(j.created_at)}</span></div>
-      </div>
-      <div class="job-card-right">
-        <div class="status-pill sp-${j.status}">${j.status}</div>
-        <div class="job-date">${j.reference}</div>
-      </div>
-      <div class="job-card-size" style="margin-left:4px;font-size:17px">${j.tyre_size||'?'}</div>
-    </div>
-  `).join('');
-}
-
-function filterJobs(filter, tab) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  if (tab) tab.classList.add('active');
-  renderJobs(filter);
-}
-
-function fmtDate(iso) {
-  if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-ZA', { day:'numeric', month:'short', year:'numeric' });
-}
-
-function openJob(id) {
-  const j = state.allJobs.find(x => String(x.id) === String(id));
-  if (!j) return;
-  state.currentJob = j;
-  document.getElementById('dRef').textContent = j.reference;
-  const badge = document.getElementById('dBadge');
-  badge.textContent = j.status.charAt(0).toUpperCase()+j.status.slice(1);
-  badge.className = 'status-pill sp-' + j.status;
-
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((j.address||'')+' '+(j.suburb||'')+' Johannesburg')}`;
-  const timeLabels = { morning:'Morning (8am–12pm)', afternoon:'Afternoon (12pm–5pm)', flexible:'Flexible' };
-
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-section">
-      <div class="ds-head">Customer</div>
-      <div class="ds-body">
-        <div class="ds-field"><span class="ds-key">Name</span><span class="ds-val">${j.customer_name}</span></div>
-        <div class="ds-field"><span class="ds-key">Phone</span><a class="call-btn" href="tel:${j.customer_phone}">📞 ${j.customer_phone}</a></div>
-        <div class="ds-field"><span class="ds-key">Time pref</span><span class="ds-val">${timeLabels[j.preferred_time]||j.preferred_time}</span></div>
-        ${j.notes ? `<div class="ds-field"><span class="ds-key">Notes</span><span class="ds-val">${j.notes}</span></div>` : ''}
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-head">Tyre & Vehicle</div>
-      <div class="ds-body">
-        <div class="ds-field"><span class="ds-key">Size</span><span class="ds-val" style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--gold)">${j.tyre_size||'Unknown'}</span></div>
-        <div class="ds-field"><span class="ds-key">Vehicle</span><span class="ds-val">${j.vehicle||'—'}</span></div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-head">Location</div>
-      <div class="ds-body">
-        <div class="ds-field"><span class="ds-key">Address</span><span class="ds-val">${j.address||''}, ${j.suburb||''}, Johannesburg</span></div>
-        <a class="maps-btn" href="${mapsUrl}" target="_blank">🗺 Navigate in Google Maps</a>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-head">Photos</div>
-      <div class="ds-body">
-        <div class="detail-photos">
-          <div class="detail-photo" onclick="${j.photo_tyre ? `openLightbox('${j.photo_tyre}')` : ''}">
-            ${j.photo_tyre ? `<img src="${j.photo_tyre}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">` : '<span style="font-size:12px;color:var(--muted);padding:8px;text-align:center">No tyre photo</span>'}
-          </div>
-          <div class="detail-photo" onclick="${j.photo_rim ? `openLightbox('${j.photo_rim}')` : ''}">
-            ${j.photo_rim ? `<img src="${j.photo_rim}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">` : '<span style="font-size:12px;color:var(--muted);padding:8px;text-align:center">No rim photo</span>'}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-head">Update Status</div>
-      <div class="ds-body">
-        <div class="status-grid">
-          ${['pending','sourcing','confirmed','complete'].map(s => `
-            <button class="status-btn ${j.status===s?'active-'+s:''}" id="sbtn-${s}" onclick="updateStatus('${j.id}','${s}')">
-              ${{pending:'⏳ Pending',sourcing:'🔍 Sourcing',confirmed:'✅ Confirmed',complete:'🏁 Complete'}[s]}
-            </button>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="ds-head">Admin Notes</div>
-      <div class="ds-body">
-        <textarea class="admin-notes-ta" id="adminNotes" placeholder="Internal notes — not visible to customer...">${j.admin_notes||''}</textarea>
-        <button onclick="saveAdminNotes('${j.id}')" style="margin-top:10px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.35);color:var(--gold);padding:10px 18px;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:Barlow,sans-serif;letter-spacing:0.05em;text-transform:uppercase">Save Notes</button>
-      </div>
-    </div>
-  `;
-  showAdminView('detail');
-}
-
-async function updateStatus(id, status) {
-  const j = state.allJobs.find(x => String(x.id) === String(id));
-  if (!j) return;
-  j.status = status;
-  ['pending','sourcing','confirmed','complete'].forEach(s => {
-    const btn = document.getElementById('sbtn-' + s);
-    if (btn) btn.className = 'status-btn' + (s===status ? ' active-'+s : '');
-  });
-  const badge = document.getElementById('dBadge');
-  badge.textContent = status.charAt(0).toUpperCase()+status.slice(1);
-  badge.className = 'status-pill sp-' + status;
-  if (isConfigured) {
-    try {
-      const { error } = await db.from('jobs').update({ status }).eq('id', id);
-      if (error) throw error;
-    } catch(e) { showToast('Status update failed: ' + e.message, 'error'); return; }
-  }
-  const msgs = {
-    sourcing:  `Hi ${j.customer_name}! 🔍 We're busy sourcing your tyre (${j.tyre_size}). We'll confirm shortly. — Tyres Now!`,
-    confirmed: `Hi ${j.customer_name}! ✅ Great news — your tyre is confirmed! Our tech is on the way to ${j.suburb}. — Tyres Now!`,
-    complete:  `Hi ${j.customer_name}! 🏁 Your tyre fitting is complete. Thank you for choosing Tyres Now! 🔧`,
-  };
-  if (msgs[status] && !CONFIG.callMeBotKey.startsWith('YOUR')) {
-    const phone = j.customer_phone.replace(/\s/g,'').replace(/^0/,'27');
-    fetch(`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msgs[status])}&apikey=${CONFIG.callMeBotKey}`).catch(() => {});
-  }
-  showToast(`✓ Status updated to "${status}"`, 'success');
-  updateTabCounts();
-}
-
-async function saveAdminNotes(id) {
-  const notes = document.getElementById('adminNotes').value;
-  const j = state.allJobs.find(x => String(x.id) === String(id));
-  if (j) j.admin_notes = notes;
-  if (isConfigured) {
-    const { error } = await db.from('jobs').update({ admin_notes: notes }).eq('id', id);
-    if (error) { showToast('Failed to save notes', 'error'); return; }
-  }
-  showToast('Notes saved', 'success');
-}
-
-function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('show'); }
-function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
-
-initSupabase();
+document.querySelectorAll('.wa-display').forEach(el => el.textContent = CONFIG.whatsappDisplay);
 showStep(1);
 </script>
 </body>
